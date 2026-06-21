@@ -7,49 +7,41 @@
   <script src="https://js.puter.com/v2/"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: #0f1117;
       color: #e2e8f0;
       min-height: 100vh;
       display: flex;
-      align-items: center;
       justify-content: center;
       padding: 20px;
     }
-
+    .wrap {
+      width: 100%;
+      max-width: 560px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 20px 0;
+    }
     .card {
       background: #1a1d2e;
       border: 1px solid #2d3148;
       border-radius: 16px;
-      padding: 28px;
-      width: 100%;
-      max-width: 520px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      padding: 20px 24px;
     }
-
+    /* HEADER */
     .header {
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 24px;
       padding-bottom: 16px;
       border-bottom: 1px solid #2d3148;
+      margin-bottom: 16px;
     }
+    .header h1 { font-size: 15px; font-weight: 700; color: #818cf8; text-transform: uppercase; letter-spacing: 0.5px; }
 
-    .header-icon {
-      font-size: 24px;
-    }
-
-    .header h1 {
-      font-size: 16px;
-      font-weight: 700;
-      color: #818cf8;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-    }
-
+    /* AUTH BAR */
     .auth-bar {
       display: flex;
       align-items: center;
@@ -57,212 +49,212 @@
       background: #0f1117;
       border: 1px solid #2d3148;
       border-radius: 10px;
-      padding: 10px 14px;
-      margin-bottom: 20px;
+      padding: 9px 14px;
+      margin-bottom: 16px;
       font-size: 13px;
     }
-
     .auth-status { color: #94a3b8; }
     .auth-status.ok { color: #34d399; }
-
-    .btn-login {
-      background: #4f46e5;
-      color: #fff;
-      border: none;
-      border-radius: 7px;
-      padding: 6px 14px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
+    .btn-login { background: #4f46e5; color: #fff; border: none; border-radius: 7px; padding: 5px 14px; font-size: 12px; font-weight: 600; cursor: pointer; }
     .btn-login:hover { background: #4338ca; }
     .btn-login.hidden { display: none; }
 
-    .form-group { margin-bottom: 16px; }
-
-    .label-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 7px;
+    /* FORM */
+    .form-group { margin-bottom: 14px; }
+    .label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    label { font-size: 11px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+    .btn-sm {
+      background: #1e2235; color: #818cf8; border: 1px solid #2d3148;
+      border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 600; cursor: pointer;
     }
-
-    label {
-      font-size: 12px;
-      font-weight: 600;
-      color: #94a3b8;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .btn-paste {
-      background: #1e2235;
-      color: #818cf8;
-      border: 1px solid #2d3148;
-      border-radius: 6px;
-      padding: 4px 10px;
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .btn-paste:hover { background: #2d3148; }
-
+    .btn-sm:hover { background: #2d3148; }
     textarea, input[type="text"] {
-      width: 100%;
-      background: #0f1117;
-      border: 1px solid #2d3148;
-      border-radius: 10px;
-      padding: 10px 12px;
-      font-size: 13px;
-      font-family: inherit;
-      color: #e2e8f0;
-      line-height: 1.5;
-      transition: border-color 0.2s;
-      resize: none;
+      width: 100%; background: #0f1117; border: 1px solid #2d3148; border-radius: 10px;
+      padding: 9px 12px; font-size: 13px; font-family: inherit; color: #e2e8f0;
+      line-height: 1.5; transition: border-color 0.2s; resize: none;
     }
-
-    textarea:focus, input[type="text"]:focus {
-      outline: none;
-      border-color: #4f46e5;
-    }
-
+    textarea:focus, input[type="text"]:focus { outline: none; border-color: #4f46e5; }
     textarea::placeholder, input::placeholder { color: #475569; }
+    textarea { height: 76px; }
+    #productLinkInput { height: 56px; }
 
-    textarea { height: 80px; }
-    #productLinkInput { height: 60px; }
-
-    .btn-group {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
+    .btn-group { display: flex; gap: 10px; margin-top: 6px; }
     #generateBtn {
-      flex: 2;
-      background: #4f46e5;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      padding: 12px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
+      flex: 2; background: #4f46e5; color: #fff; border: none;
+      border-radius: 10px; padding: 11px; font-size: 14px; font-weight: 700; cursor: pointer;
     }
     #generateBtn:hover:not(:disabled) { background: #4338ca; }
     #generateBtn:disabled { background: #2d3148; color: #475569; cursor: not-allowed; }
-
     #clearBtn {
-      flex: 1;
-      background: #1e2235;
-      color: #94a3b8;
-      border: 1px solid #2d3148;
-      border-radius: 10px;
-      padding: 12px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
+      flex: 1; background: #1e2235; color: #94a3b8; border: 1px solid #2d3148;
+      border-radius: 10px; padding: 11px; font-size: 13px; font-weight: 600; cursor: pointer;
     }
     #clearBtn:hover { background: #2d3148; color: #e2e8f0; }
 
-    .output-box {
-      margin-top: 20px;
-      background: #0f1117;
-      border: 1px solid #2d3148;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
+    .output-box { margin-top: 14px; background: #0f1117; border: 1px solid #2d3148; border-radius: 12px; overflow: hidden; }
     .output-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 14px;
-      border-bottom: 1px solid #2d3148;
-      font-size: 12px;
-      font-weight: 600;
-      color: #818cf8;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 9px 14px; border-bottom: 1px solid #2d3148;
+      font-size: 12px; font-weight: 600; color: #818cf8;
     }
-
-    #copyBtn {
-      background: #1e2235;
-      color: #818cf8;
-      border: 1px solid #2d3148;
-      border-radius: 6px;
-      padding: 4px 12px;
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
+    #copyBtn { background: #1e2235; color: #818cf8; border: 1px solid #2d3148; border-radius: 6px; padding: 3px 12px; font-size: 11px; font-weight: 600; cursor: pointer; }
     #copyBtn:hover { background: #2d3148; }
-
-    #output {
-      padding: 14px;
-      font-size: 13px;
-      color: #e2e8f0;
-      line-height: 1.6;
-      white-space: pre-wrap;
-      word-break: break-word;
-      min-height: 60px;
-    }
-
+    #output { padding: 14px; font-size: 13px; color: #e2e8f0; line-height: 1.6; white-space: pre-wrap; word-break: break-word; min-height: 56px; }
     #output.placeholder { color: #475569; }
     #output.error { color: #f87171; }
     #output.loading { color: #818cf8; }
+
+    /* ===== TEMPLATES CARD ===== */
+    .templates-card .card-title {
+      font-size: 12px; font-weight: 700; color: #94a3b8;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      margin-bottom: 14px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .btn-add-tpl {
+      background: #4f46e5; color: #fff; border: none;
+      border-radius: 7px; padding: 5px 12px; font-size: 12px; font-weight: 600; cursor: pointer;
+    }
+    .btn-add-tpl:hover { background: #4338ca; }
+
+    .tpl-list { display: flex; flex-direction: column; gap: 8px; }
+    .tpl-item {
+      display: flex; align-items: center; gap: 8px;
+      background: #0f1117; border: 1px solid #2d3148;
+      border-radius: 10px; padding: 10px 12px;
+      cursor: pointer; transition: border-color 0.2s;
+    }
+    .tpl-item:hover { border-color: #4f46e5; }
+    .tpl-item.active { border-color: #818cf8; background: #1e2235; }
+    .tpl-icon { font-size: 18px; flex-shrink: 0; }
+    .tpl-info { flex: 1; min-width: 0; }
+    .tpl-name { font-size: 13px; font-weight: 600; color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tpl-link { font-size: 11px; color: #475569; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+    .tpl-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    .btn-tpl-edit, .btn-tpl-del {
+      background: #1e2235; border: 1px solid #2d3148;
+      border-radius: 6px; padding: 4px 8px; font-size: 11px; cursor: pointer;
+    }
+    .btn-tpl-edit { color: #818cf8; }
+    .btn-tpl-edit:hover { background: #2d3148; }
+    .btn-tpl-del { color: #f87171; }
+    .btn-tpl-del:hover { background: #2d1f1f; }
+
+    .tpl-empty { font-size: 13px; color: #475569; text-align: center; padding: 16px 0; }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6); z-index: 100;
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: #1a1d2e; border: 1px solid #2d3148;
+      border-radius: 16px; padding: 24px; width: 90%; max-width: 440px;
+    }
+    .modal h2 { font-size: 15px; font-weight: 700; color: #818cf8; margin-bottom: 18px; }
+    .modal .form-group { margin-bottom: 14px; }
+    .modal label { display: block; font-size: 11px; font-weight: 600; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px; }
+    .modal input, .modal textarea { width: 100%; }
+    .modal-btns { display: flex; gap: 10px; margin-top: 18px; }
+    .btn-save {
+      flex: 2; background: #4f46e5; color: #fff; border: none;
+      border-radius: 10px; padding: 10px; font-size: 13px; font-weight: 700; cursor: pointer;
+    }
+    .btn-save:hover { background: #4338ca; }
+    .btn-cancel {
+      flex: 1; background: #1e2235; color: #94a3b8; border: 1px solid #2d3148;
+      border-radius: 10px; padding: 10px; font-size: 13px; font-weight: 600; cursor: pointer;
+    }
+    .btn-cancel:hover { background: #2d3148; }
   </style>
 </head>
 <body>
+<div class="wrap">
 
-<div class="card">
-  <div class="header">
-    <span class="header-icon">🤖</span>
-    <h1>AI AUTO Content Commenter FB</h1>
-  </div>
-
-  <!-- Auth Bar -->
-  <div class="auth-bar">
-    <span class="auth-status" id="authStatus">⏳ Đang kiểm tra đăng nhập...</span>
-    <button class="btn-login hidden" id="loginBtn">Đăng nhập Puter</button>
-  </div>
-
-  <!-- Form -->
-  <div class="form-group">
-    <div class="label-row">
-      <label for="articleInput">Nội dung bài viết gốc</label>
-      <button class="btn-paste" id="pasteBtn">📋 Dán nội dung</button>
+  <!-- MAIN CARD -->
+  <div class="card">
+    <div class="header">
+      <span style="font-size:22px">🤖</span>
+      <h1>AI AUTO Content Commenter FB</h1>
     </div>
-    <textarea id="articleInput" placeholder="Dán nội dung bài viết cần trả lời vào đây..."></textarea>
-  </div>
 
-  <div class="form-group">
-    <label for="productNameInput">Tên sản phẩm</label>
-    <input type="text" id="productNameInput" placeholder="VD: Sữa rửa mặt trị mụn, Áo thun nam...">
-  </div>
-
-  <div class="form-group">
-    <label for="productLinkInput">Danh sách link Shopee (mỗi link một dòng)</label>
-    <textarea id="productLinkInput" placeholder="Dán các link Shopee vào đây..."></textarea>
-  </div>
-
-  <div class="btn-group">
-    <button id="generateBtn">✨ Tạo bình luận</button>
-    <button id="clearBtn">🔄 Làm mới</button>
-  </div>
-
-  <div class="output-box">
-    <div class="output-header">
-      <span>✨ Kết quả bình luận</span>
-      <button id="copyBtn">Sao chép</button>
+    <div class="auth-bar">
+      <span class="auth-status" id="authStatus">⏳ Đang kiểm tra...</span>
+      <button class="btn-login hidden" id="loginBtn">Đăng nhập Puter</button>
     </div>
-    <div id="output" class="placeholder">Bình luận sẽ xuất hiện tại đây...</div>
+
+    <div class="form-group">
+      <div class="label-row">
+        <label>Nội dung bài viết gốc</label>
+        <button class="btn-sm" id="pasteBtn">📋 Dán nội dung</button>
+      </div>
+      <textarea id="articleInput" placeholder="Dán nội dung bài viết cần trả lời vào đây..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Tên sản phẩm</label>
+      <input type="text" id="productNameInput" placeholder="VD: Sữa rửa mặt trị mụn, Áo thun nam...">
+    </div>
+
+    <div class="form-group">
+      <label>Danh sách link Shopee (mỗi link một dòng)</label>
+      <textarea id="productLinkInput" placeholder="Dán các link Shopee vào đây..."></textarea>
+    </div>
+
+    <div class="btn-group">
+      <button id="generateBtn">✨ Tạo bình luận</button>
+      <button id="clearBtn">🔄 Làm mới</button>
+    </div>
+
+    <div class="output-box">
+      <div class="output-header">
+        <span>✨ Kết quả bình luận</span>
+        <button id="copyBtn">Sao chép</button>
+      </div>
+      <div id="output" class="placeholder">Bình luận sẽ xuất hiện tại đây...</div>
+    </div>
+  </div>
+
+  <!-- TEMPLATES CARD -->
+  <div class="card templates-card">
+    <div class="card-title">
+      <span>📦 Mẫu sản phẩm sẵn</span>
+      <button class="btn-add-tpl" id="btnAddTpl">+ Thêm mẫu</button>
+    </div>
+    <div class="tpl-list" id="tplList">
+      <div class="tpl-empty">Chưa có mẫu nào. Nhấn "+ Thêm mẫu" để tạo.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL THÊM/SỬA MẪU -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h2 id="modalTitle">Thêm mẫu mới</h2>
+    <div class="form-group">
+      <label>Tên mẫu (VD: Mẫu 1 - Kem dưỡng da)</label>
+      <input type="text" id="tplNameInput" placeholder="Nhập tên mẫu...">
+    </div>
+    <div class="form-group">
+      <label>Tên sản phẩm</label>
+      <input type="text" id="tplProductInput" placeholder="VD: Kem dưỡng ẩm Cerave...">
+    </div>
+    <div class="form-group">
+      <label>Danh sách link Shopee (mỗi link một dòng)</label>
+      <textarea id="tplLinksInput" style="height:70px" placeholder="Dán link Shopee vào đây..."></textarea>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-save" id="btnSaveTpl">💾 Lưu mẫu</button>
+      <button class="btn-cancel" id="btnCancelTpl">Huỷ</button>
+    </div>
   </div>
 </div>
 
 <script>
+  // ===== ELEMENTS =====
   const articleInput = document.getElementById('articleInput');
   const productNameInput = document.getElementById('productNameInput');
   const productLinkInput = document.getElementById('productLinkInput');
@@ -274,7 +266,17 @@
   const authStatus = document.getElementById('authStatus');
   const loginBtn = document.getElementById('loginBtn');
 
-  // --- KHỞI TẠO AUTH ---
+  const btnAddTpl = document.getElementById('btnAddTpl');
+  const tplList = document.getElementById('tplList');
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalTitle = document.getElementById('modalTitle');
+  const tplNameInput = document.getElementById('tplNameInput');
+  const tplProductInput = document.getElementById('tplProductInput');
+  const tplLinksInput = document.getElementById('tplLinksInput');
+  const btnSaveTpl = document.getElementById('btnSaveTpl');
+  const btnCancelTpl = document.getElementById('btnCancelTpl');
+
+  // ===== AUTH =====
   function updateAuthUI() {
     if (puter.auth.isSignedIn()) {
       authStatus.textContent = '✅ Đã đăng nhập Puter';
@@ -286,66 +288,153 @@
       loginBtn.classList.remove('hidden');
     }
   }
-
-  window.addEventListener('load', () => {
-    updateAuthUI();
-  });
-
+  window.addEventListener('load', updateAuthUI);
   loginBtn.addEventListener('click', async () => {
-    try {
-      await puter.auth.signIn();
-      updateAuthUI();
-    } catch(e) {
-      authStatus.textContent = '❌ Đăng nhập thất bại: ' + e.message;
-    }
+    try { await puter.auth.signIn(); updateAuthUI(); }
+    catch(e) { authStatus.textContent = '❌ ' + e.message; }
   });
 
-  // --- DÁN NỘI DUNG ---
+  // ===== TEMPLATES: LƯU VÀO LOCALSTORAGE =====
+  const STORAGE_KEY = 'ai_commenter_templates';
+  let templates = [];
+  let editingIndex = -1;
+
+  function loadTemplates() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      templates = raw ? JSON.parse(raw) : [];
+    } catch { templates = []; }
+  }
+
+  function saveTemplates() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(templates));
+  }
+
+  function renderTemplates() {
+    if (templates.length === 0) {
+      tplList.innerHTML = '<div class="tpl-empty">Chưa có mẫu nào. Nhấn "+ Thêm mẫu" để tạo.</div>';
+      return;
+    }
+    tplList.innerHTML = templates.map((t, i) => `
+      <div class="tpl-item" id="tpl-${i}" onclick="applyTemplate(${i})">
+        <div class="tpl-icon">📦</div>
+        <div class="tpl-info">
+          <div class="tpl-name">${escHtml(t.name)}</div>
+          <div class="tpl-link">${escHtml(t.product)}</div>
+        </div>
+        <div class="tpl-actions" onclick="event.stopPropagation()">
+          <button class="btn-tpl-edit" onclick="openEditModal(${i})">✏️ Sửa</button>
+          <button class="btn-tpl-del" onclick="deleteTemplate(${i})">🗑️</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // Áp dụng mẫu vào form
+  function applyTemplate(i) {
+    const t = templates[i];
+    productNameInput.value = t.product;
+    productLinkInput.value = t.links;
+    // Highlight mẫu đang chọn
+    document.querySelectorAll('.tpl-item').forEach(el => el.classList.remove('active'));
+    const el = document.getElementById('tpl-' + i);
+    if (el) el.classList.add('active');
+    // Scroll lên form
+    productNameInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function deleteTemplate(i) {
+    if (!confirm(`Xoá mẫu "${templates[i].name}"?`)) return;
+    templates.splice(i, 1);
+    saveTemplates();
+    renderTemplates();
+  }
+
+  // ===== MODAL =====
+  function openAddModal() {
+    editingIndex = -1;
+    modalTitle.textContent = 'Thêm mẫu mới';
+    tplNameInput.value = '';
+    tplProductInput.value = '';
+    tplLinksInput.value = '';
+    modalOverlay.classList.add('show');
+    tplNameInput.focus();
+  }
+
+  function openEditModal(i) {
+    editingIndex = i;
+    const t = templates[i];
+    modalTitle.textContent = 'Sửa mẫu';
+    tplNameInput.value = t.name;
+    tplProductInput.value = t.product;
+    tplLinksInput.value = t.links;
+    modalOverlay.classList.add('show');
+    tplNameInput.focus();
+  }
+
+  function closeModal() {
+    modalOverlay.classList.remove('show');
+  }
+
+  btnAddTpl.addEventListener('click', openAddModal);
+  btnCancelTpl.addEventListener('click', closeModal);
+  modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
+
+  btnSaveTpl.addEventListener('click', () => {
+    const name = tplNameInput.value.trim();
+    const product = tplProductInput.value.trim();
+    const links = tplLinksInput.value.trim();
+    if (!name) { alert('Vui lòng nhập tên mẫu!'); tplNameInput.focus(); return; }
+    if (!product) { alert('Vui lòng nhập tên sản phẩm!'); tplProductInput.focus(); return; }
+
+    const tpl = { name, product, links };
+    if (editingIndex >= 0) {
+      templates[editingIndex] = tpl;
+    } else {
+      templates.push(tpl);
+    }
+    saveTemplates();
+    renderTemplates();
+    closeModal();
+  });
+
+  // ===== MAIN ACTIONS =====
   pasteBtn.addEventListener('click', async () => {
-    try {
-      articleInput.value = await navigator.clipboard.readText();
-    } catch {
-      alert('Trình duyệt chặn clipboard. Hãy dán thủ công bằng Ctrl+V.');
-    }
+    try { articleInput.value = await navigator.clipboard.readText(); }
+    catch { alert('Trình duyệt chặn clipboard. Hãy dán thủ công bằng Ctrl+V.'); }
   });
 
-  // --- LÀM MỚI ---
   clearBtn.addEventListener('click', () => {
     articleInput.value = '';
     productNameInput.value = '';
     productLinkInput.value = '';
     output.textContent = 'Bình luận sẽ xuất hiện tại đây...';
     output.className = 'placeholder';
+    document.querySelectorAll('.tpl-item').forEach(el => el.classList.remove('active'));
   });
 
-  // --- SAO CHÉP ---
   copyBtn.addEventListener('click', () => {
-    const text = output.textContent;
     if (!output.classList.contains('placeholder') && !output.classList.contains('loading')) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard.writeText(output.textContent);
       const orig = copyBtn.textContent;
       copyBtn.textContent = '✔️ Đã chép!';
       setTimeout(() => copyBtn.textContent = orig, 2000);
     }
   });
 
-  // --- TẠO BÌNH LUẬN ---
   generateBtn.addEventListener('click', async () => {
     const article = articleInput.value.trim();
     const productName = productNameInput.value.trim();
     const productLinks = productLinkInput.value.trim();
-
     if (!article) { alert('Vui lòng dán nội dung bài viết gốc!'); return; }
 
     if (!puter.auth.isSignedIn()) {
-      try {
-        await puter.auth.signIn();
-        updateAuthUI();
-      } catch(e) {
-        output.textContent = '❌ Chưa đăng nhập. Vui lòng nhấn "Đăng nhập Puter" và thử lại.';
-        output.className = 'error';
-        return;
-      }
+      try { await puter.auth.signIn(); updateAuthUI(); }
+      catch(e) { output.textContent = '❌ Chưa đăng nhập. Vui lòng đăng nhập và thử lại.'; output.className = 'error'; return; }
     }
 
     let selectedLink = '';
@@ -382,7 +471,6 @@ Trả về DUY NHẤT nội dung bình luận.`;
       if (response?.message?.content) result = response.message.content;
       else if (typeof response === 'string') result = response;
       else result = 'Không nhận được phản hồi.';
-
       output.textContent = result.replace(/^"|"$/g, '').trim();
       output.className = '';
     } catch(e) {
@@ -393,6 +481,10 @@ Trả về DUY NHẤT nội dung bình luận.`;
       generateBtn.textContent = '✨ Tạo bình luận';
     }
   });
+
+  // ===== KHỞI TẠO =====
+  loadTemplates();
+  renderTemplates();
 </script>
 </body>
 </html>
