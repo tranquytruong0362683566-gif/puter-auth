@@ -3,56 +3,69 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI AUTO Content Commenter FB</title>
+  <title>AI Auto Content FaceBook- By Trường Saker</title>
   <script src="https://js.puter.com/v2/"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #0f1117;
-      color: #e2e8f0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      padding: 20px;
+      background: #0f1117; color: #e2e8f0;
+      min-height: 100vh; display: flex; justify-content: center; padding: 20px;
     }
-    .wrap {
-      width: 100%;
-      max-width: 560px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      padding: 20px 0;
+    .wrap { width: 100%; max-width: 560px; display: flex; flex-direction: column; gap: 16px; padding: 20px 0; }
+    .card { background: #1a1d2e; border: 1px solid #2d3148; border-radius: 16px; padding: 20px 24px; }
+
+    /* ===== LOGIN SCREEN ===== */
+    #loginScreen {
+      position: fixed; inset: 0; background: #0f1117;
+      display: flex; align-items: center; justify-content: center; z-index: 200;
     }
-    .card {
-      background: #1a1d2e;
-      border: 1px solid #2d3148;
-      border-radius: 16px;
-      padding: 20px 24px;
+    #loginScreen.hidden { display: none; }
+    .login-box {
+      background: #1a1d2e; border: 1px solid #2d3148; border-radius: 20px;
+      padding: 36px 32px; width: 90%; max-width: 380px; text-align: center;
     }
+    .login-logo { font-size: 40px; margin-bottom: 12px; }
+    .login-title { font-size: 17px; font-weight: 700; color: #818cf8; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .login-sub { font-size: 12px; color: #475569; margin-bottom: 28px; }
+    .login-label { font-size: 11px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; display: block; text-align: left; margin-bottom: 8px; }
+    .login-input {
+      width: 100%; background: #0f1117; border: 1px solid #2d3148;
+      border-radius: 10px; padding: 12px 14px; font-size: 14px;
+      font-family: inherit; color: #e2e8f0; letter-spacing: 2px;
+      text-align: center; margin-bottom: 14px;
+    }
+    .login-input:focus { outline: none; border-color: #4f46e5; }
+    .login-input::placeholder { letter-spacing: 0; color: #475569; }
+    .btn-unlock {
+      width: 100%; background: #4f46e5; color: #fff; border: none;
+      border-radius: 10px; padding: 12px; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: background 0.2s; margin-bottom: 10px;
+    }
+    .btn-unlock:hover { background: #4338ca; }
+    .btn-unlock:disabled { background: #2d3148; color: #475569; cursor: not-allowed; }
+    .login-error { font-size: 12px; color: #f87171; min-height: 18px; margin-top: 4px; }
+    .login-footer { font-size: 11px; color: #334155; margin-top: 20px; }
+
+    /* KEY INFO BAR */
+    .key-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #0f1117; border: 1px solid #1e3a2f;
+      border-radius: 10px; padding: 8px 14px; margin-bottom: 16px; font-size: 12px;
+    }
+    .key-info { color: #34d399; display: flex; align-items: center; gap: 6px; }
+    .btn-logout-key {
+      background: #1e2235; color: #f87171; border: 1px solid #2d3148;
+      border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 600; cursor: pointer;
+    }
+    .btn-logout-key:hover { background: #2d1f1f; }
+
     /* HEADER */
-    .header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid #2d3148;
-      margin-bottom: 16px;
-    }
+    .header { display: flex; align-items: center; gap: 10px; padding-bottom: 16px; border-bottom: 1px solid #2d3148; margin-bottom: 16px; }
     .header h1 { font-size: 15px; font-weight: 700; color: #818cf8; text-transform: uppercase; letter-spacing: 0.5px; }
 
     /* AUTH BAR */
-    .auth-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #0f1117;
-      border: 1px solid #2d3148;
-      border-radius: 10px;
-      padding: 9px 14px;
-      margin-bottom: 16px;
-      font-size: 13px;
-    }
+    .auth-bar { display: flex; align-items: center; justify-content: space-between; background: #0f1117; border: 1px solid #2d3148; border-radius: 10px; padding: 9px 14px; margin-bottom: 16px; font-size: 13px; }
     .auth-status { color: #94a3b8; }
     .auth-status.ok { color: #34d399; }
     .btn-login { background: #4f46e5; color: #fff; border: none; border-radius: 7px; padding: 5px 14px; font-size: 12px; font-weight: 600; cursor: pointer; }
@@ -63,10 +76,7 @@
     .form-group { margin-bottom: 14px; }
     .label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
     label { font-size: 11px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
-    .btn-sm {
-      background: #1e2235; color: #818cf8; border: 1px solid #2d3148;
-      border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 600; cursor: pointer;
-    }
+    .btn-sm { background: #1e2235; color: #818cf8; border: 1px solid #2d3148; border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 600; cursor: pointer; }
     .btn-sm:hover { background: #2d3148; }
     textarea, input[type="text"] {
       width: 100%; background: #0f1117; border: 1px solid #2d3148; border-radius: 10px;
@@ -79,24 +89,14 @@
     #productLinkInput { height: 56px; }
 
     .btn-group { display: flex; gap: 10px; margin-top: 6px; }
-    #generateBtn {
-      flex: 2; background: #4f46e5; color: #fff; border: none;
-      border-radius: 10px; padding: 11px; font-size: 14px; font-weight: 700; cursor: pointer;
-    }
+    #generateBtn { flex: 2; background: #4f46e5; color: #fff; border: none; border-radius: 10px; padding: 11px; font-size: 14px; font-weight: 700; cursor: pointer; }
     #generateBtn:hover:not(:disabled) { background: #4338ca; }
     #generateBtn:disabled { background: #2d3148; color: #475569; cursor: not-allowed; }
-    #clearBtn {
-      flex: 1; background: #1e2235; color: #94a3b8; border: 1px solid #2d3148;
-      border-radius: 10px; padding: 11px; font-size: 13px; font-weight: 600; cursor: pointer;
-    }
+    #clearBtn { flex: 1; background: #1e2235; color: #94a3b8; border: 1px solid #2d3148; border-radius: 10px; padding: 11px; font-size: 13px; font-weight: 600; cursor: pointer; }
     #clearBtn:hover { background: #2d3148; color: #e2e8f0; }
 
     .output-box { margin-top: 14px; background: #0f1117; border: 1px solid #2d3148; border-radius: 12px; overflow: hidden; }
-    .output-header {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 9px 14px; border-bottom: 1px solid #2d3148;
-      font-size: 12px; font-weight: 600; color: #818cf8;
-    }
+    .output-header { display: flex; justify-content: space-between; align-items: center; padding: 9px 14px; border-bottom: 1px solid #2d3148; font-size: 12px; font-weight: 600; color: #818cf8; }
     #copyBtn { background: #1e2235; color: #818cf8; border: 1px solid #2d3148; border-radius: 6px; padding: 3px 12px; font-size: 11px; font-weight: 600; cursor: pointer; }
     #copyBtn:hover { background: #2d3148; }
     #output { padding: 14px; font-size: 13px; color: #e2e8f0; line-height: 1.6; white-space: pre-wrap; word-break: break-word; min-height: 56px; }
@@ -104,26 +104,12 @@
     #output.error { color: #f87171; }
     #output.loading { color: #818cf8; }
 
-    /* ===== TEMPLATES CARD ===== */
-    .templates-card .card-title {
-      font-size: 12px; font-weight: 700; color: #94a3b8;
-      text-transform: uppercase; letter-spacing: 0.5px;
-      margin-bottom: 14px;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .btn-add-tpl {
-      background: #4f46e5; color: #fff; border: none;
-      border-radius: 7px; padding: 5px 12px; font-size: 12px; font-weight: 600; cursor: pointer;
-    }
+    /* TEMPLATES */
+    .templates-card .card-title { font-size: 12px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
+    .btn-add-tpl { background: #4f46e5; color: #fff; border: none; border-radius: 7px; padding: 5px 12px; font-size: 12px; font-weight: 600; cursor: pointer; }
     .btn-add-tpl:hover { background: #4338ca; }
-
     .tpl-list { display: flex; flex-direction: column; gap: 8px; }
-    .tpl-item {
-      display: flex; align-items: center; gap: 8px;
-      background: #0f1117; border: 1px solid #2d3148;
-      border-radius: 10px; padding: 10px 12px;
-      cursor: pointer; transition: border-color 0.2s;
-    }
+    .tpl-item { display: flex; align-items: center; gap: 8px; background: #0f1117; border: 1px solid #2d3148; border-radius: 10px; padding: 10px 12px; cursor: pointer; transition: border-color 0.2s; }
     .tpl-item:hover { border-color: #4f46e5; }
     .tpl-item.active { border-color: #818cf8; background: #1e2235; }
     .tpl-icon { font-size: 18px; flex-shrink: 0; }
@@ -131,55 +117,60 @@
     .tpl-name { font-size: 13px; font-weight: 600; color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .tpl-link { font-size: 11px; color: #475569; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
     .tpl-actions { display: flex; gap: 6px; flex-shrink: 0; }
-    .btn-tpl-edit, .btn-tpl-del {
-      background: #1e2235; border: 1px solid #2d3148;
-      border-radius: 6px; padding: 4px 8px; font-size: 11px; cursor: pointer;
-    }
+    .btn-tpl-edit, .btn-tpl-del { background: #1e2235; border: 1px solid #2d3148; border-radius: 6px; padding: 4px 8px; font-size: 11px; cursor: pointer; }
     .btn-tpl-edit { color: #818cf8; }
     .btn-tpl-edit:hover { background: #2d3148; }
     .btn-tpl-del { color: #f87171; }
     .btn-tpl-del:hover { background: #2d1f1f; }
-
     .tpl-empty { font-size: 13px; color: #475569; text-align: center; padding: 16px 0; }
 
     /* MODAL */
-    .modal-overlay {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.6); z-index: 100;
-      align-items: center; justify-content: center;
-    }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; align-items: center; justify-content: center; }
     .modal-overlay.show { display: flex; }
-    .modal {
-      background: #1a1d2e; border: 1px solid #2d3148;
-      border-radius: 16px; padding: 24px; width: 90%; max-width: 440px;
-    }
+    .modal { background: #1a1d2e; border: 1px solid #2d3148; border-radius: 16px; padding: 24px; width: 90%; max-width: 440px; }
     .modal h2 { font-size: 15px; font-weight: 700; color: #818cf8; margin-bottom: 18px; }
     .modal .form-group { margin-bottom: 14px; }
     .modal label { display: block; font-size: 11px; font-weight: 600; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px; }
     .modal input, .modal textarea { width: 100%; }
     .modal-btns { display: flex; gap: 10px; margin-top: 18px; }
-    .btn-save {
-      flex: 2; background: #4f46e5; color: #fff; border: none;
-      border-radius: 10px; padding: 10px; font-size: 13px; font-weight: 700; cursor: pointer;
-    }
+    .btn-save { flex: 2; background: #4f46e5; color: #fff; border: none; border-radius: 10px; padding: 10px; font-size: 13px; font-weight: 700; cursor: pointer; }
     .btn-save:hover { background: #4338ca; }
-    .btn-cancel {
-      flex: 1; background: #1e2235; color: #94a3b8; border: 1px solid #2d3148;
-      border-radius: 10px; padding: 10px; font-size: 13px; font-weight: 600; cursor: pointer;
-    }
+    .btn-cancel { flex: 1; background: #1e2235; color: #94a3b8; border: 1px solid #2d3148; border-radius: 10px; padding: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
     .btn-cancel:hover { background: #2d3148; }
   </style>
 </head>
 <body>
-<div class="wrap">
 
-  <!-- MAIN CARD -->
+<!-- ===== MÀN HÌNH NHẬP KEY ===== -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">🤖</div>
+    <div class="login-title">AI Content FaceBook</div>
+    <div class="login-sub">Nhập key để truy cập hệ thống</div>
+    <label class="login-label" for="keyInput">🔑 Key bản quyền</label>
+    <input type="text" class="login-input" id="keyInput" placeholder="Nhập key của bạn...">
+    <div class="login-error" id="loginError"></div>
+    <button class="btn-unlock" id="btnUnlock">🔓 Mở khoá</button>
+    <div class="login-footer">Liên hệ admin trần quý trường để nhận key sử dụng</div>
+  </div>
+</div>
+
+<!-- ===== NỘI DUNG CHÍNH ===== -->
+<div class="wrap" id="mainContent" style="display:none">
+
   <div class="card">
     <div class="header">
       <span style="font-size:22px">🤖</span>
-      <h1>AI AUTO Content Commenter FB</h1>
+      <h1>AI Auto Content FaceBook- By Trường Saker</h1>
     </div>
 
+    <!-- Key info -->
+    <div class="key-bar">
+      <div class="key-info">🔑 <span id="keyDisplay"></span></div>
+      <button class="btn-logout-key" id="btnLogoutKey">Đăng xuất</button>
+    </div>
+
+    <!-- Puter Auth -->
     <div class="auth-bar">
       <span class="auth-status" id="authStatus">⏳ Đang kiểm tra...</span>
       <button class="btn-login hidden" id="loginBtn">Đăng nhập Puter</button>
@@ -217,26 +208,24 @@
     </div>
   </div>
 
-  <!-- TEMPLATES CARD -->
+  <!-- TEMPLATES -->
   <div class="card templates-card">
     <div class="card-title">
       <span>📦 Mẫu sản phẩm sẵn</span>
       <button class="btn-add-tpl" id="btnAddTpl">+ Thêm mẫu</button>
     </div>
-    <div class="tpl-list" id="tplList">
-      <div class="tpl-empty">Chưa có mẫu nào. Nhấn "+ Thêm mẫu" để tạo.</div>
-    </div>
+    <div class="tpl-list" id="tplList"></div>
   </div>
 
 </div>
 
-<!-- MODAL THÊM/SỬA MẪU -->
+<!-- MODAL MẪU -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <h2 id="modalTitle">Thêm mẫu mới</h2>
     <div class="form-group">
-      <label>Tên mẫu (VD: Mẫu 1 - Kem dưỡng da)</label>
-      <input type="text" id="tplNameInput" placeholder="Nhập tên mẫu...">
+      <label>Tên mẫu</label>
+      <input type="text" id="tplNameInput" placeholder="VD: Mẫu 1 - Kem dưỡng da...">
     </div>
     <div class="form-group">
       <label>Tên sản phẩm</label>
@@ -254,19 +243,121 @@
 </div>
 
 <script>
-  // ===== ELEMENTS =====
-  const articleInput = document.getElementById('articleInput');
-  const productNameInput = document.getElementById('productNameInput');
-  const productLinkInput = document.getElementById('productLinkInput');
-  const generateBtn = document.getElementById('generateBtn');
-  const clearBtn = document.getElementById('clearBtn');
-  const pasteBtn = document.getElementById('pasteBtn');
-  const output = document.getElementById('output');
-  const copyBtn = document.getElementById('copyBtn');
+  // ==============================
+  // KEY AUTH - fetch từ keys.json trên GitHub Pages
+  // ==============================
+  // URL của file keys.json (cùng repo GitHub Pages)
+  const KEYS_URL = './keys.json';
+  const KEY_STORAGE = 'ai_commenter_key';
+
+  const loginScreen = document.getElementById('loginScreen');
+  const mainContent = document.getElementById('mainContent');
+  const keyInput = document.getElementById('keyInput');
+  const btnUnlock = document.getElementById('btnUnlock');
+  const loginError = document.getElementById('loginError');
+  const keyDisplay = document.getElementById('keyDisplay');
+  const btnLogoutKey = document.getElementById('btnLogoutKey');
+
+  async function fetchValidKeys() {
+    try {
+      const res = await fetch(KEYS_URL + '?t=' + Date.now());
+      const data = await res.json();
+      return data.keys || [];
+    } catch {
+      return null; // lỗi mạng
+    }
+  }
+
+  async function checkKey(key) {
+    const keys = await fetchValidKeys();
+    if (keys === null) return 'network';
+    return keys.map(k => k.trim().toUpperCase()).includes(key.trim().toUpperCase());
+  }
+
+  function showMain(key) {
+    loginScreen.classList.add('hidden');
+    mainContent.style.display = 'flex';
+    // Hiển thị key rút gọn: KEY-****-****-ABCD
+    const parts = key.split('-');
+    const masked = parts.map((p, i) => (i === 0 || i === parts.length - 1) ? p : '****').join('-');
+    keyDisplay.textContent = masked;
+    updateAuthUI();
+    loadTemplates();
+    renderTemplates();
+  }
+
+  // Kiểm tra key đã lưu khi load
+  window.addEventListener('load', async () => {
+    const saved = localStorage.getItem(KEY_STORAGE);
+    if (saved) {
+      const valid = await checkKey(saved);
+      if (valid === true) { showMain(saved); return; }
+      // key bị thu hồi hoặc lỗi → xoá và hiện màn đăng nhập
+      localStorage.removeItem(KEY_STORAGE);
+    }
+  });
+
+  btnUnlock.addEventListener('click', async () => {
+    const key = keyInput.value.trim();
+    if (!key) { loginError.textContent = 'Vui lòng nhập key!'; return; }
+    btnUnlock.disabled = true;
+    btnUnlock.textContent = '⏳ Đang kiểm tra...';
+    loginError.textContent = '';
+
+    const result = await checkKey(key);
+    if (result === true) {
+      localStorage.setItem(KEY_STORAGE, key);
+      showMain(key);
+    } else if (result === 'network') {
+      loginError.textContent = '❌ Không kết nối được. Vui lòng thử lại.';
+    } else {
+      loginError.textContent = '❌ Key không hợp lệ hoặc đã hết hạn!';
+    }
+    btnUnlock.disabled = false;
+    btnUnlock.textContent = '🔓 Mở khoá';
+  });
+
+  keyInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') btnUnlock.click(); });
+
+  btnLogoutKey.addEventListener('click', () => {
+    if (!confirm('Đăng xuất khỏi web?')) return;
+    localStorage.removeItem(KEY_STORAGE);
+    mainContent.style.display = 'none';
+    loginScreen.classList.remove('hidden');
+    keyInput.value = '';
+    loginError.textContent = '';
+  });
+
+  // ==============================
+  // PUTER AUTH
+  // ==============================
   const authStatus = document.getElementById('authStatus');
   const loginBtn = document.getElementById('loginBtn');
 
-  const btnAddTpl = document.getElementById('btnAddTpl');
+  function updateAuthUI() {
+    if (typeof puter === 'undefined' || !puter.auth.isSignedIn()) {
+      authStatus.textContent = '⚠️ Chưa đăng nhập Puter';
+      authStatus.className = 'auth-status';
+      loginBtn.classList.remove('hidden');
+    } else {
+      authStatus.textContent = '✅ Đã đăng nhập Puter';
+      authStatus.className = 'auth-status ok';
+      loginBtn.classList.add('hidden');
+    }
+  }
+
+  loginBtn.addEventListener('click', async () => {
+    try { await puter.auth.signIn(); updateAuthUI(); }
+    catch(e) { authStatus.textContent = '❌ ' + e.message; }
+  });
+
+  // ==============================
+  // TEMPLATES
+  // ==============================
+  const STORAGE_KEY = 'ai_commenter_templates';
+  let templates = [];
+  let editingIndex = -1;
+
   const tplList = document.getElementById('tplList');
   const modalOverlay = document.getElementById('modalOverlay');
   const modalTitle = document.getElementById('modalTitle');
@@ -276,42 +367,17 @@
   const btnSaveTpl = document.getElementById('btnSaveTpl');
   const btnCancelTpl = document.getElementById('btnCancelTpl');
 
-  // ===== AUTH =====
-  function updateAuthUI() {
-    if (puter.auth.isSignedIn()) {
-      authStatus.textContent = '✅ Đã đăng nhập Puter';
-      authStatus.className = 'auth-status ok';
-      loginBtn.classList.add('hidden');
-    } else {
-      authStatus.textContent = '⚠️ Chưa đăng nhập';
-      authStatus.className = 'auth-status';
-      loginBtn.classList.remove('hidden');
-    }
-  }
-  window.addEventListener('load', updateAuthUI);
-  loginBtn.addEventListener('click', async () => {
-    try { await puter.auth.signIn(); updateAuthUI(); }
-    catch(e) { authStatus.textContent = '❌ ' + e.message; }
-  });
-
-  // ===== TEMPLATES: LƯU VÀO LOCALSTORAGE =====
-  const STORAGE_KEY = 'ai_commenter_templates';
-  let templates = [];
-  let editingIndex = -1;
-
   function loadTemplates() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      templates = raw ? JSON.parse(raw) : [];
-    } catch { templates = []; }
+    try { templates = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+    catch { templates = []; }
   }
 
-  function saveTemplates() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(templates));
-  }
+  function saveTemplates() { localStorage.setItem(STORAGE_KEY, JSON.stringify(templates)); }
+
+  function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
   function renderTemplates() {
-    if (templates.length === 0) {
+    if (!templates.length) {
       tplList.innerHTML = '<div class="tpl-empty">Chưa có mẫu nào. Nhấn "+ Thêm mẫu" để tạo.</div>';
       return;
     }
@@ -319,105 +385,81 @@
       <div class="tpl-item" id="tpl-${i}" onclick="applyTemplate(${i})">
         <div class="tpl-icon">📦</div>
         <div class="tpl-info">
-          <div class="tpl-name">${escHtml(t.name)}</div>
-          <div class="tpl-link">${escHtml(t.product)}</div>
+          <div class="tpl-name">${esc(t.name)}</div>
+          <div class="tpl-link">${esc(t.product)}</div>
         </div>
         <div class="tpl-actions" onclick="event.stopPropagation()">
           <button class="btn-tpl-edit" onclick="openEditModal(${i})">✏️ Sửa</button>
           <button class="btn-tpl-del" onclick="deleteTemplate(${i})">🗑️</button>
         </div>
-      </div>
-    `).join('');
+      </div>`).join('');
   }
 
-  function escHtml(s) {
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  // Áp dụng mẫu vào form
   function applyTemplate(i) {
     const t = templates[i];
-    productNameInput.value = t.product;
-    productLinkInput.value = t.links;
-    // Highlight mẫu đang chọn
+    document.getElementById('productNameInput').value = t.product;
+    document.getElementById('productLinkInput').value = t.links;
     document.querySelectorAll('.tpl-item').forEach(el => el.classList.remove('active'));
-    const el = document.getElementById('tpl-' + i);
-    if (el) el.classList.add('active');
-    // Scroll lên form
-    productNameInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    document.getElementById('tpl-' + i)?.classList.add('active');
+    document.getElementById('productNameInput').scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
   function deleteTemplate(i) {
     if (!confirm(`Xoá mẫu "${templates[i].name}"?`)) return;
-    templates.splice(i, 1);
-    saveTemplates();
-    renderTemplates();
-  }
-
-  // ===== MODAL =====
-  function openAddModal() {
-    editingIndex = -1;
-    modalTitle.textContent = 'Thêm mẫu mới';
-    tplNameInput.value = '';
-    tplProductInput.value = '';
-    tplLinksInput.value = '';
-    modalOverlay.classList.add('show');
-    tplNameInput.focus();
+    templates.splice(i, 1); saveTemplates(); renderTemplates();
   }
 
   function openEditModal(i) {
     editingIndex = i;
     const t = templates[i];
     modalTitle.textContent = 'Sửa mẫu';
-    tplNameInput.value = t.name;
-    tplProductInput.value = t.product;
-    tplLinksInput.value = t.links;
-    modalOverlay.classList.add('show');
-    tplNameInput.focus();
+    tplNameInput.value = t.name; tplProductInput.value = t.product; tplLinksInput.value = t.links;
+    modalOverlay.classList.add('show'); tplNameInput.focus();
   }
 
-  function closeModal() {
-    modalOverlay.classList.remove('show');
-  }
+  document.getElementById('btnAddTpl').addEventListener('click', () => {
+    editingIndex = -1;
+    modalTitle.textContent = 'Thêm mẫu mới';
+    tplNameInput.value = ''; tplProductInput.value = ''; tplLinksInput.value = '';
+    modalOverlay.classList.add('show'); tplNameInput.focus();
+  });
 
-  btnAddTpl.addEventListener('click', openAddModal);
-  btnCancelTpl.addEventListener('click', closeModal);
-  modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
+  btnCancelTpl.addEventListener('click', () => modalOverlay.classList.remove('show'));
+  modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) modalOverlay.classList.remove('show'); });
 
   btnSaveTpl.addEventListener('click', () => {
     const name = tplNameInput.value.trim();
     const product = tplProductInput.value.trim();
     const links = tplLinksInput.value.trim();
-    if (!name) { alert('Vui lòng nhập tên mẫu!'); tplNameInput.focus(); return; }
-    if (!product) { alert('Vui lòng nhập tên sản phẩm!'); tplProductInput.focus(); return; }
-
+    if (!name) { alert('Vui lòng nhập tên mẫu!'); return; }
+    if (!product) { alert('Vui lòng nhập tên sản phẩm!'); return; }
     const tpl = { name, product, links };
-    if (editingIndex >= 0) {
-      templates[editingIndex] = tpl;
-    } else {
-      templates.push(tpl);
-    }
-    saveTemplates();
-    renderTemplates();
-    closeModal();
+    if (editingIndex >= 0) templates[editingIndex] = tpl; else templates.push(tpl);
+    saveTemplates(); renderTemplates(); modalOverlay.classList.remove('show');
   });
 
-  // ===== MAIN ACTIONS =====
-  pasteBtn.addEventListener('click', async () => {
+  // ==============================
+  // MAIN ACTIONS
+  // ==============================
+  const articleInput = document.getElementById('articleInput');
+  const productNameInput = document.getElementById('productNameInput');
+  const productLinkInput = document.getElementById('productLinkInput');
+  const generateBtn = document.getElementById('generateBtn');
+  const output = document.getElementById('output');
+
+  document.getElementById('pasteBtn').addEventListener('click', async () => {
     try { articleInput.value = await navigator.clipboard.readText(); }
     catch { alert('Trình duyệt chặn clipboard. Hãy dán thủ công bằng Ctrl+V.'); }
   });
 
-  clearBtn.addEventListener('click', () => {
-    articleInput.value = '';
-    productNameInput.value = '';
-    productLinkInput.value = '';
-    output.textContent = 'Bình luận sẽ xuất hiện tại đây...';
-    output.className = 'placeholder';
+  document.getElementById('clearBtn').addEventListener('click', () => {
+    articleInput.value = ''; productNameInput.value = ''; productLinkInput.value = '';
+    output.textContent = 'Bình luận sẽ xuất hiện tại đây...'; output.className = 'placeholder';
     document.querySelectorAll('.tpl-item').forEach(el => el.classList.remove('active'));
   });
 
-  copyBtn.addEventListener('click', () => {
+  document.getElementById('copyBtn').addEventListener('click', () => {
+    const copyBtn = document.getElementById('copyBtn');
     if (!output.classList.contains('placeholder') && !output.classList.contains('loading')) {
       navigator.clipboard.writeText(output.textContent);
       const orig = copyBtn.textContent;
@@ -434,7 +476,7 @@
 
     if (!puter.auth.isSignedIn()) {
       try { await puter.auth.signIn(); updateAuthUI(); }
-      catch(e) { output.textContent = '❌ Chưa đăng nhập. Vui lòng đăng nhập và thử lại.'; output.className = 'error'; return; }
+      catch(e) { output.textContent = '❌ Chưa đăng nhập Puter.'; output.className = 'error'; return; }
     }
 
     let selectedLink = '';
@@ -443,48 +485,33 @@
       if (arr.length) selectedLink = arr[Math.floor(Math.random() * arr.length)];
     }
 
-    generateBtn.disabled = true;
-    generateBtn.textContent = '⏳ Đang xử lý...';
-    output.textContent = 'Đang phân tích và tạo bình luận...';
-    output.className = 'loading';
+    generateBtn.disabled = true; generateBtn.textContent = '⏳ Đang xử lý...';
+    output.textContent = 'Đang phân tích và tạo bình luận...'; output.className = 'loading';
 
     const prompt = `Bạn là chuyên gia Social Content và Affiliate Marketing.
-
 Nhiệm vụ: Viết 1 bình luận mạng xã hội gồm 2 phần liên kết mượt mà thành đoạn văn hoàn chỉnh.
-
 Thông tin:
 - Nội dung bài viết: "${article}"
 - Tên sản phẩm: "${productName || 'Sản phẩm'}"
 - Link sản phẩm: "${selectedLink || ''}"
-
 Quy tắc:
-BƯỚC 1: Viết 1-2 câu tương tác, đồng cảm với nội dung bài viết. Giọng đời thường, tự nhiên.
-BƯỚC 2: Nếu sản phẩm liên quan → lồng ghép tự nhiên. Nếu không → chuyển hướng khéo léo bằng "À tiện thể", "Sẵn tiện"... rồi giới thiệu sản phẩm kèm link.
-
-Định dạng: 2-4 câu ngắn, có thể dùng icon nhẹ, chèn URL trực tiếp, không dùng dấu ngoặc kép bao quanh, không dấu chấm cuối câu.
-
+BƯỚC 1: Viết 1-2 câu tương tác, đồng cảm. Giọng đời thường, tự nhiên.
+BƯỚC 2: Nếu sản phẩm liên quan → lồng ghép tự nhiên. Nếu không → "À tiện thể", "Sẵn tiện"... rồi giới thiệu kèm link.
+Định dạng: 2-4 câu ngắn, icon nhẹ, URL trực tiếp, không ngoặc kép, không dấu chấm cuối.
 Trả về DUY NHẤT nội dung bình luận.`;
 
     try {
       const response = await puter.ai.chat(prompt, { model: 'gpt-4o' });
-      let result = '';
-      if (response?.message?.content) result = response.message.content;
-      else if (typeof response === 'string') result = response;
-      else result = 'Không nhận được phản hồi.';
+      let result = response?.message?.content || (typeof response === 'string' ? response : 'Không có phản hồi.');
       output.textContent = result.replace(/^"|"$/g, '').trim();
       output.className = '';
     } catch(e) {
       output.textContent = '❌ Lỗi: ' + (e.message || 'Không xác định');
       output.className = 'error';
     } finally {
-      generateBtn.disabled = false;
-      generateBtn.textContent = '✨ Tạo bình luận';
+      generateBtn.disabled = false; generateBtn.textContent = '✨ Tạo bình luận';
     }
   });
-
-  // ===== KHỞI TẠO =====
-  loadTemplates();
-  renderTemplates();
 </script>
 </body>
 </html>
