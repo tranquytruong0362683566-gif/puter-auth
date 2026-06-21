@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI AUTO Content Commenter FB</title>
+  <script src="https://js.puter.com/v2/"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .card {
+      background: #1a1d2e;
+      border: 1px solid #2d3148;
+      border-radius: 16px;
+      padding: 28px;
+      width: 100%;
+      max-width: 520px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #2d3148;
+    }
+
+    .header-icon {
+      font-size: 24px;
+    }
+
+    .header h1 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #818cf8;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .auth-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #0f1117;
+      border: 1px solid #2d3148;
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 20px;
+      font-size: 13px;
+    }
+
+    .auth-status { color: #94a3b8; }
+    .auth-status.ok { color: #34d399; }
+
+    .btn-login {
+      background: #4f46e5;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-login:hover { background: #4338ca; }
+    .btn-login.hidden { display: none; }
+
+    .form-group { margin-bottom: 16px; }
+
+    .label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 7px;
+    }
+
+    label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-paste {
+      background: #1e2235;
+      color: #818cf8;
+      border: 1px solid #2d3148;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-paste:hover { background: #2d3148; }
+
+    textarea, input[type="text"] {
+      width: 100%;
+      background: #0f1117;
+      border: 1px solid #2d3148;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 13px;
+      font-family: inherit;
+      color: #e2e8f0;
+      line-height: 1.5;
+      transition: border-color 0.2s;
+      resize: none;
+    }
+
+    textarea:focus, input[type="text"]:focus {
+      outline: none;
+      border-color: #4f46e5;
+    }
+
+    textarea::placeholder, input::placeholder { color: #475569; }
+
+    textarea { height: 80px; }
+    #productLinkInput { height: 60px; }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    #generateBtn {
+      flex: 2;
+      background: #4f46e5;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    #generateBtn:hover:not(:disabled) { background: #4338ca; }
+    #generateBtn:disabled { background: #2d3148; color: #475569; cursor: not-allowed; }
+
+    #clearBtn {
+      flex: 1;
+      background: #1e2235;
+      color: #94a3b8;
+      border: 1px solid #2d3148;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    #clearBtn:hover { background: #2d3148; color: #e2e8f0; }
+
+    .output-box {
+      margin-top: 20px;
+      background: #0f1117;
+      border: 1px solid #2d3148;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .output-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      border-bottom: 1px solid #2d3148;
+      font-size: 12px;
+      font-weight: 600;
+      color: #818cf8;
+    }
+
+    #copyBtn {
+      background: #1e2235;
+      color: #818cf8;
+      border: 1px solid #2d3148;
+      border-radius: 6px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    #copyBtn:hover { background: #2d3148; }
+
+    #output {
+      padding: 14px;
+      font-size: 13px;
+      color: #e2e8f0;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-word;
+      min-height: 60px;
+    }
+
+    #output.placeholder { color: #475569; }
+    #output.error { color: #f87171; }
+    #output.loading { color: #818cf8; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="header">
+    <span class="header-icon">🤖</span>
+    <h1>AI AUTO Content Commenter FB</h1>
+  </div>
+
+  <!-- Auth Bar -->
+  <div class="auth-bar">
+    <span class="auth-status" id="authStatus">⏳ Đang kiểm tra đăng nhập...</span>
+    <button class="btn-login hidden" id="loginBtn">Đăng nhập Puter</button>
+  </div>
+
+  <!-- Form -->
+  <div class="form-group">
+    <div class="label-row">
+      <label for="articleInput">Nội dung bài viết gốc</label>
+      <button class="btn-paste" id="pasteBtn">📋 Dán nội dung</button>
+    </div>
+    <textarea id="articleInput" placeholder="Dán nội dung bài viết cần trả lời vào đây..."></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="productNameInput">Tên sản phẩm</label>
+    <input type="text" id="productNameInput" placeholder="VD: Sữa rửa mặt trị mụn, Áo thun nam...">
+  </div>
+
+  <div class="form-group">
+    <label for="productLinkInput">Danh sách link Shopee (mỗi link một dòng)</label>
+    <textarea id="productLinkInput" placeholder="Dán các link Shopee vào đây..."></textarea>
+  </div>
+
+  <div class="btn-group">
+    <button id="generateBtn">✨ Tạo bình luận</button>
+    <button id="clearBtn">🔄 Làm mới</button>
+  </div>
+
+  <div class="output-box">
+    <div class="output-header">
+      <span>✨ Kết quả bình luận</span>
+      <button id="copyBtn">Sao chép</button>
+    </div>
+    <div id="output" class="placeholder">Bình luận sẽ xuất hiện tại đây...</div>
+  </div>
+</div>
+
+<script>
+  const articleInput = document.getElementById('articleInput');
+  const productNameInput = document.getElementById('productNameInput');
+  const productLinkInput = document.getElementById('productLinkInput');
+  const generateBtn = document.getElementById('generateBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const pasteBtn = document.getElementById('pasteBtn');
+  const output = document.getElementById('output');
+  const copyBtn = document.getElementById('copyBtn');
+  const authStatus = document.getElementById('authStatus');
+  const loginBtn = document.getElementById('loginBtn');
+
+  // --- KHỞI TẠO AUTH ---
+  function updateAuthUI() {
+    if (puter.auth.isSignedIn()) {
+      authStatus.textContent = '✅ Đã đăng nhập Puter';
+      authStatus.className = 'auth-status ok';
+      loginBtn.classList.add('hidden');
+    } else {
+      authStatus.textContent = '⚠️ Chưa đăng nhập';
+      authStatus.className = 'auth-status';
+      loginBtn.classList.remove('hidden');
+    }
+  }
+
+  window.addEventListener('load', () => {
+    updateAuthUI();
+  });
+
+  loginBtn.addEventListener('click', async () => {
+    try {
+      await puter.auth.signIn();
+      updateAuthUI();
+    } catch(e) {
+      authStatus.textContent = '❌ Đăng nhập thất bại: ' + e.message;
+    }
+  });
+
+  // --- DÁN NỘI DUNG ---
+  pasteBtn.addEventListener('click', async () => {
+    try {
+      articleInput.value = await navigator.clipboard.readText();
+    } catch {
+      alert('Trình duyệt chặn clipboard. Hãy dán thủ công bằng Ctrl+V.');
+    }
+  });
+
+  // --- LÀM MỚI ---
+  clearBtn.addEventListener('click', () => {
+    articleInput.value = '';
+    productNameInput.value = '';
+    productLinkInput.value = '';
+    output.textContent = 'Bình luận sẽ xuất hiện tại đây...';
+    output.className = 'placeholder';
+  });
+
+  // --- SAO CHÉP ---
+  copyBtn.addEventListener('click', () => {
+    const text = output.textContent;
+    if (!output.classList.contains('placeholder') && !output.classList.contains('loading')) {
+      navigator.clipboard.writeText(text);
+      const orig = copyBtn.textContent;
+      copyBtn.textContent = '✔️ Đã chép!';
+      setTimeout(() => copyBtn.textContent = orig, 2000);
+    }
+  });
+
+  // --- TẠO BÌNH LUẬN ---
+  generateBtn.addEventListener('click', async () => {
+    const article = articleInput.value.trim();
+    const productName = productNameInput.value.trim();
+    const productLinks = productLinkInput.value.trim();
+
+    if (!article) { alert('Vui lòng dán nội dung bài viết gốc!'); return; }
+
+    if (!puter.auth.isSignedIn()) {
+      try {
+        await puter.auth.signIn();
+        updateAuthUI();
+      } catch(e) {
+        output.textContent = '❌ Chưa đăng nhập. Vui lòng nhấn "Đăng nhập Puter" và thử lại.';
+        output.className = 'error';
+        return;
+      }
+    }
+
+    let selectedLink = '';
+    if (productLinks) {
+      const arr = productLinks.split('\n').map(l => l.trim()).filter(l => l);
+      if (arr.length) selectedLink = arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    generateBtn.disabled = true;
+    generateBtn.textContent = '⏳ Đang xử lý...';
+    output.textContent = 'Đang phân tích và tạo bình luận...';
+    output.className = 'loading';
+
+    const prompt = `Bạn là chuyên gia Social Content và Affiliate Marketing.
+
+Nhiệm vụ: Viết 1 bình luận mạng xã hội gồm 2 phần liên kết mượt mà thành đoạn văn hoàn chỉnh.
+
+Thông tin:
+- Nội dung bài viết: "${article}"
+- Tên sản phẩm: "${productName || 'Sản phẩm'}"
+- Link sản phẩm: "${selectedLink || ''}"
+
+Quy tắc:
+BƯỚC 1: Viết 1-2 câu tương tác, đồng cảm với nội dung bài viết. Giọng đời thường, tự nhiên.
+BƯỚC 2: Nếu sản phẩm liên quan → lồng ghép tự nhiên. Nếu không → chuyển hướng khéo léo bằng "À tiện thể", "Sẵn tiện"... rồi giới thiệu sản phẩm kèm link.
+
+Định dạng: 2-4 câu ngắn, có thể dùng icon nhẹ, chèn URL trực tiếp, không dùng dấu ngoặc kép bao quanh, không dấu chấm cuối câu.
+
+Trả về DUY NHẤT nội dung bình luận.`;
+
+    try {
+      const response = await puter.ai.chat(prompt, { model: 'gpt-4o' });
+      let result = '';
+      if (response?.message?.content) result = response.message.content;
+      else if (typeof response === 'string') result = response;
+      else result = 'Không nhận được phản hồi.';
+
+      output.textContent = result.replace(/^"|"$/g, '').trim();
+      output.className = '';
+    } catch(e) {
+      output.textContent = '❌ Lỗi: ' + (e.message || 'Không xác định');
+      output.className = 'error';
+    } finally {
+      generateBtn.disabled = false;
+      generateBtn.textContent = '✨ Tạo bình luận';
+    }
+  });
+</script>
+</body>
+</html>
