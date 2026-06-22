@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Auto Content FaceBook- By Trường Saker</title>
+  <title>AI Auto Content FaceBook - By Trường Saker</title>
   <script src="https://js.puter.com/v2/"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -26,52 +26,6 @@
       .wrap { grid-template-columns: 1fr; max-width: 560px; }
       .main-col, .side-col { width: 100%; }
     }
-
-    /* ===== LOGIN SCREEN ===== */
-    #loginScreen {
-      position: fixed; inset: 0; background: #f7f8fa;
-      display: flex; align-items: center; justify-content: center; z-index: 200;
-    }
-    #loginScreen.hidden { display: none; }
-    .login-box {
-      background: #ffffff; border: 1px solid #e3e6ec; border-radius: 20px;
-      padding: 36px 32px; width: 90%; max-width: 380px; text-align: center;
-      box-shadow: 0 4px 24px rgba(20,24,40,0.06);
-    }
-    .login-logo { font-size: 40px; margin-bottom: 12px; }
-    .login-title { font-size: 17px; font-weight: 700; color: #4f46e5; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .login-sub { font-size: 12px; color: #8a93a3; margin-bottom: 28px; }
-    .login-label { font-size: 11px; font-weight: 600; color: #5b6373; text-transform: uppercase; letter-spacing: 0.5px; display: block; text-align: left; margin-bottom: 8px; }
-    .login-input {
-      width: 100%; background: #f7f8fa; border: 1px solid #d8dce4;
-      border-radius: 10px; padding: 12px 14px; font-size: 14px;
-      font-family: inherit; color: #1e2330; letter-spacing: 2px;
-      text-align: center; margin-bottom: 14px;
-    }
-    .login-input:focus { outline: none; border-color: #4f46e5; }
-    .login-input::placeholder { letter-spacing: 0; color: #9aa1b0; }
-    .btn-unlock {
-      width: 100%; background: #4f46e5; color: #fff; border: none;
-      border-radius: 10px; padding: 12px; font-size: 14px; font-weight: 700;
-      cursor: pointer; transition: background 0.2s; margin-bottom: 10px;
-    }
-    .btn-unlock:hover { background: #4338ca; }
-    .btn-unlock:disabled { background: #e3e6ec; color: #9aa1b0; cursor: not-allowed; }
-    .login-error { font-size: 12px; color: #dc2626; min-height: 18px; margin-top: 4px; }
-    .login-footer { font-size: 11px; color: #b0b6c2; margin-top: 20px; }
-
-    /* KEY INFO BAR */
-    .key-bar {
-      display: flex; align-items: center; justify-content: space-between;
-      background: #f0fdf6; border: 1px solid #c8f0d9;
-      border-radius: 10px; padding: 8px 14px; margin-bottom: 16px; font-size: 12px;
-    }
-    .key-info { color: #15803d; display: flex; align-items: center; gap: 6px; }
-    .btn-logout-key {
-      background: #fff5f5; color: #dc2626; border: 1px solid #f3d2d2;
-      border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 600; cursor: pointer;
-    }
-    .btn-logout-key:hover { background: #fde8e8; }
 
     /* HEADER */
     .header { display: flex; align-items: center; gap: 10px; padding-bottom: 16px; border-bottom: 1px solid #ebedf1; margin-bottom: 16px; }
@@ -154,37 +108,15 @@
 </head>
 <body>
 
-<!-- ===== MÀN HÌNH NHẬP KEY ===== -->
-<div id="loginScreen">
-  <div class="login-box">
-    <div class="login-logo">🤖</div>
-    <div class="login-title">AI Content FaceBook</div>
-    <div class="login-sub">Nhập key để truy cập hệ thống</div>
-    <label class="login-label" for="keyInput">🔑 Key bản quyền</label>
-    <input type="text" class="login-input" id="keyInput" placeholder="Nhập key của bạn...">
-    <div class="login-error" id="loginError"></div>
-    <button class="btn-unlock" id="btnUnlock">🔓 Mở khoá</button>
-    <div class="login-footer">Liên hệ admin trần quý trường để nhận key sử dụng</div>
-  </div>
-</div>
-
-<!-- ===== NỘI DUNG CHÍNH ===== -->
-<div class="wrap" id="mainContent" style="display:none">
+<div class="wrap">
 
   <div class="main-col">
     <div class="card">
       <div class="header">
         <span style="font-size:22px">🤖</span>
-        <h1>AI Auto Content FaceBook- By Trường Saker</h1>
+        <h1>AI Auto Content FaceBook - By Trường Saker</h1>
       </div>
 
-      <!-- Key info -->
-      <div class="key-bar">
-        <div class="key-info">🔑 <span id="keyDisplay"></span></div>
-        <button class="btn-logout-key" id="btnLogoutKey">Đăng xuất</button>
-      </div>
-
-      <!-- Puter Auth -->
       <div class="auth-bar">
         <span class="auth-status" id="authStatus">⏳ Đang kiểm tra...</span>
         <button class="btn-login hidden" id="loginBtn">Đăng nhập Puter</button>
@@ -223,7 +155,6 @@
     </div>
   </div>
 
-  <!-- TEMPLATES -->
   <div class="side-col">
     <div class="card templates-card">
       <div class="card-title">
@@ -236,7 +167,6 @@
 
 </div>
 
-<!-- MODAL MẪU -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <h2 id="modalTitle">Thêm mẫu mới</h2>
@@ -261,91 +191,6 @@
 
 <script>
   // ==============================
-  // KEY AUTH - fetch từ keys.json trên GitHub Pages
-  // ==============================
-  // URL của file keys.json (cùng repo GitHub Pages)
-  const KEYS_URL = './keys.json';
-  const KEY_STORAGE = 'ai_commenter_key';
-
-  const loginScreen = document.getElementById('loginScreen');
-  const mainContent = document.getElementById('mainContent');
-  const keyInput = document.getElementById('keyInput');
-  const btnUnlock = document.getElementById('btnUnlock');
-  const loginError = document.getElementById('loginError');
-  const keyDisplay = document.getElementById('keyDisplay');
-  const btnLogoutKey = document.getElementById('btnLogoutKey');
-
-  async function fetchValidKeys() {
-    try {
-      const res = await fetch(KEYS_URL + '?t=' + Date.now());
-      const data = await res.json();
-      return data.keys || [];
-    } catch {
-      return null; // lỗi mạng
-    }
-  }
-
-  async function checkKey(key) {
-    const keys = await fetchValidKeys();
-    if (keys === null) return 'network';
-    return keys.map(k => k.trim().toUpperCase()).includes(key.trim().toUpperCase());
-  }
-
-  function showMain(key) {
-    loginScreen.classList.add('hidden');
-    mainContent.style.display = 'flex';
-    // Hiển thị key rút gọn: KEY-****-****-ABCD
-    const parts = key.split('-');
-    const masked = parts.map((p, i) => (i === 0 || i === parts.length - 1) ? p : '****').join('-');
-    keyDisplay.textContent = masked;
-    updateAuthUI();
-    loadTemplates();
-    renderTemplates();
-  }
-
-  // Kiểm tra key đã lưu khi load
-  window.addEventListener('load', async () => {
-    const saved = localStorage.getItem(KEY_STORAGE);
-    if (saved) {
-      const valid = await checkKey(saved);
-      if (valid === true) { showMain(saved); return; }
-      // key bị thu hồi hoặc lỗi → xoá và hiện màn đăng nhập
-      localStorage.removeItem(KEY_STORAGE);
-    }
-  });
-
-  btnUnlock.addEventListener('click', async () => {
-    const key = keyInput.value.trim();
-    if (!key) { loginError.textContent = 'Vui lòng nhập key!'; return; }
-    btnUnlock.disabled = true;
-    btnUnlock.textContent = '⏳ Đang kiểm tra...';
-    loginError.textContent = '';
-
-    const result = await checkKey(key);
-    if (result === true) {
-      localStorage.setItem(KEY_STORAGE, key);
-      showMain(key);
-    } else if (result === 'network') {
-      loginError.textContent = '❌ Không kết nối được. Vui lòng thử lại.';
-    } else {
-      loginError.textContent = '❌ Key không hợp lệ hoặc đã hết hạn!';
-    }
-    btnUnlock.disabled = false;
-    btnUnlock.textContent = '🔓 Mở khoá';
-  });
-
-  keyInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') btnUnlock.click(); });
-
-  btnLogoutKey.addEventListener('click', () => {
-    if (!confirm('Đăng xuất khỏi web?')) return;
-    localStorage.removeItem(KEY_STORAGE);
-    mainContent.style.display = 'none';
-    loginScreen.classList.remove('hidden');
-    keyInput.value = '';
-    loginError.textContent = '';
-  });
-
-  // ==============================
   // PUTER AUTH
   // ==============================
   const authStatus = document.getElementById('authStatus');
@@ -366,6 +211,13 @@
   loginBtn.addEventListener('click', async () => {
     try { await puter.auth.signIn(); updateAuthUI(); }
     catch(e) { authStatus.textContent = '❌ ' + e.message; }
+  });
+
+  // Tự động kích hoạt khi trang web tải xong
+  window.addEventListener('DOMContentLoaded', () => {
+    updateAuthUI();
+    loadTemplates();
+    renderTemplates();
   });
 
   // ==============================
