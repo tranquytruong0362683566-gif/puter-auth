@@ -9,65 +9,76 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #0f1117; color: #e2e8f0;
+      background: #f7f8fa; color: #1e2330;
       min-height: 100vh; display: flex; justify-content: center; padding: 20px;
     }
-    .wrap { width: 100%; max-width: 560px; display: flex; flex-direction: column; gap: 16px; padding: 20px 0; }
-    .card { background: #1a1d2e; border: 1px solid #2d3148; border-radius: 16px; padding: 20px 24px; }
+    .wrap {
+      width: 100%; max-width: 920px;
+      display: grid; grid-template-columns: 1fr 320px; gap: 16px;
+      align-items: start; padding: 20px 0;
+    }
+    .main-col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+    .side-col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+    .card { background: #ffffff; border: 1px solid #e3e6ec; border-radius: 16px; padding: 20px 24px; box-shadow: 0 1px 2px rgba(20,24,40,0.04); }
+
+    @media (max-width: 760px) {
+      .wrap { grid-template-columns: 1fr; max-width: 560px; }
+    }
 
     /* ===== LOGIN SCREEN ===== */
     #loginScreen {
-      position: fixed; inset: 0; background: #0f1117;
+      position: fixed; inset: 0; background: #f7f8fa;
       display: flex; align-items: center; justify-content: center; z-index: 200;
     }
     #loginScreen.hidden { display: none; }
     .login-box {
-      background: #1a1d2e; border: 1px solid #2d3148; border-radius: 20px;
+      background: #ffffff; border: 1px solid #e3e6ec; border-radius: 20px;
       padding: 36px 32px; width: 90%; max-width: 380px; text-align: center;
+      box-shadow: 0 4px 24px rgba(20,24,40,0.06);
     }
     .login-logo { font-size: 40px; margin-bottom: 12px; }
-    .login-title { font-size: 17px; font-weight: 700; color: #818cf8; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .login-sub { font-size: 12px; color: #475569; margin-bottom: 28px; }
-    .login-label { font-size: 11px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; display: block; text-align: left; margin-bottom: 8px; }
+    .login-title { font-size: 17px; font-weight: 700; color: #4f46e5; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .login-sub { font-size: 12px; color: #8a93a3; margin-bottom: 28px; }
+    .login-label { font-size: 11px; font-weight: 600; color: #5b6373; text-transform: uppercase; letter-spacing: 0.5px; display: block; text-align: left; margin-bottom: 8px; }
     .login-input {
-      width: 100%; background: #0f1117; border: 1px solid #2d3148;
+      width: 100%; background: #f7f8fa; border: 1px solid #d8dce4;
       border-radius: 10px; padding: 12px 14px; font-size: 14px;
-      font-family: inherit; color: #e2e8f0; letter-spacing: 2px;
+      font-family: inherit; color: #1e2330; letter-spacing: 2px;
       text-align: center; margin-bottom: 14px;
     }
     .login-input:focus { outline: none; border-color: #4f46e5; }
-    .login-input::placeholder { letter-spacing: 0; color: #475569; }
+    .login-input::placeholder { letter-spacing: 0; color: #9aa1b0; }
     .btn-unlock {
       width: 100%; background: #4f46e5; color: #fff; border: none;
       border-radius: 10px; padding: 12px; font-size: 14px; font-weight: 700;
       cursor: pointer; transition: background 0.2s; margin-bottom: 10px;
     }
     .btn-unlock:hover { background: #4338ca; }
-    .btn-unlock:disabled { background: #2d3148; color: #475569; cursor: not-allowed; }
-    .login-error { font-size: 12px; color: #f87171; min-height: 18px; margin-top: 4px; }
-    .login-footer { font-size: 11px; color: #334155; margin-top: 20px; }
+    .btn-unlock:disabled { background: #e3e6ec; color: #9aa1b0; cursor: not-allowed; }
+    .login-error { font-size: 12px; color: #dc2626; min-height: 18px; margin-top: 4px; }
+    .login-footer { font-size: 11px; color: #b0b6c2; margin-top: 20px; }
 
     /* KEY INFO BAR */
     .key-bar {
       display: flex; align-items: center; justify-content: space-between;
-      background: #0f1117; border: 1px solid #1e3a2f;
+      background: #f0fdf6; border: 1px solid #c8f0d9;
       border-radius: 10px; padding: 8px 14px; margin-bottom: 16px; font-size: 12px;
     }
-    .key-info { color: #34d399; display: flex; align-items: center; gap: 6px; }
+    .key-info { color: #15803d; display: flex; align-items: center; gap: 6px; }
     .btn-logout-key {
-      background: #1e2235; color: #f87171; border: 1px solid #2d3148;
+      background: #fff5f5; color: #dc2626; border: 1px solid #f3d2d2;
       border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 600; cursor: pointer;
     }
-    .btn-logout-key:hover { background: #2d1f1f; }
+    .btn-logout-key:hover { background: #fde8e8; }
 
     /* HEADER */
-    .header { display: flex; align-items: center; gap: 10px; padding-bottom: 16px; border-bottom: 1px solid #2d3148; margin-bottom: 16px; }
-    .header h1 { font-size: 15px; font-weight: 700; color: #818cf8; text-transform: uppercase; letter-spacing: 0.5px; }
+    .header { display: flex; align-items: center; gap: 10px; padding-bottom: 16px; border-bottom: 1px solid #ebedf1; margin-bottom: 16px; }
+    .header h1 { font-size: 15px; font-weight: 700; color: #4f46e5; text-transform: uppercase; letter-spacing: 0.5px; }
 
     /* AUTH BAR */
-    .auth-bar { display: flex; align-items: center; justify-content: space-between; background: #0f1117; border: 1px solid #2d3148; border-radius: 10px; padding: 9px 14px; margin-bottom: 16px; font-size: 13px; }
-    .auth-status { color: #94a3b8; }
-    .auth-status.ok { color: #34d399; }
+    .auth-bar { display: flex; align-items: center; justify-content: space-between; background: #f7f8fa; border: 1px solid #e3e6ec; border-radius: 10px; padding: 9px 14px; margin-bottom: 16px; font-size: 13px; }
+    .auth-status { color: #5b6373; }
+    .auth-status.ok { color: #15803d; }
     .btn-login { background: #4f46e5; color: #fff; border: none; border-radius: 7px; padding: 5px 14px; font-size: 12px; font-weight: 600; cursor: pointer; }
     .btn-login:hover { background: #4338ca; }
     .btn-login.hidden { display: none; }
@@ -75,68 +86,69 @@
     /* FORM */
     .form-group { margin-bottom: 14px; }
     .label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-    label { font-size: 11px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
-    .btn-sm { background: #1e2235; color: #818cf8; border: 1px solid #2d3148; border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 600; cursor: pointer; }
-    .btn-sm:hover { background: #2d3148; }
+    label { font-size: 11px; font-weight: 600; color: #5b6373; text-transform: uppercase; letter-spacing: 0.5px; }
+    .btn-sm { background: #f0eefd; color: #4f46e5; border: 1px solid #ddd9fb; border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 600; cursor: pointer; }
+    .btn-sm:hover { background: #e4e0fb; }
     textarea, input[type="text"] {
-      width: 100%; background: #0f1117; border: 1px solid #2d3148; border-radius: 10px;
-      padding: 9px 12px; font-size: 13px; font-family: inherit; color: #e2e8f0;
+      width: 100%; background: #ffffff; border: 1px solid #d8dce4; border-radius: 10px;
+      padding: 9px 12px; font-size: 13px; font-family: inherit; color: #1e2330;
       line-height: 1.5; transition: border-color 0.2s; resize: none;
     }
     textarea:focus, input[type="text"]:focus { outline: none; border-color: #4f46e5; }
-    textarea::placeholder, input::placeholder { color: #475569; }
+    textarea::placeholder, input::placeholder { color: #9aa1b0; }
     textarea { height: 76px; }
     #productLinkInput { height: 56px; }
 
     .btn-group { display: flex; gap: 10px; margin-top: 6px; }
     #generateBtn { flex: 2; background: #4f46e5; color: #fff; border: none; border-radius: 10px; padding: 11px; font-size: 14px; font-weight: 700; cursor: pointer; }
     #generateBtn:hover:not(:disabled) { background: #4338ca; }
-    #generateBtn:disabled { background: #2d3148; color: #475569; cursor: not-allowed; }
-    #clearBtn { flex: 1; background: #1e2235; color: #94a3b8; border: 1px solid #2d3148; border-radius: 10px; padding: 11px; font-size: 13px; font-weight: 600; cursor: pointer; }
-    #clearBtn:hover { background: #2d3148; color: #e2e8f0; }
+    #generateBtn:disabled { background: #e3e6ec; color: #9aa1b0; cursor: not-allowed; }
+    #clearBtn { flex: 1; background: #f7f8fa; color: #5b6373; border: 1px solid #d8dce4; border-radius: 10px; padding: 11px; font-size: 13px; font-weight: 600; cursor: pointer; }
+    #clearBtn:hover { background: #ebedf1; color: #1e2330; }
 
-    .output-box { margin-top: 14px; background: #0f1117; border: 1px solid #2d3148; border-radius: 12px; overflow: hidden; }
-    .output-header { display: flex; justify-content: space-between; align-items: center; padding: 9px 14px; border-bottom: 1px solid #2d3148; font-size: 12px; font-weight: 600; color: #818cf8; }
-    #copyBtn { background: #1e2235; color: #818cf8; border: 1px solid #2d3148; border-radius: 6px; padding: 3px 12px; font-size: 11px; font-weight: 600; cursor: pointer; }
-    #copyBtn:hover { background: #2d3148; }
-    #output { padding: 14px; font-size: 13px; color: #e2e8f0; line-height: 1.6; white-space: pre-wrap; word-break: break-word; min-height: 56px; }
-    #output.placeholder { color: #475569; }
-    #output.error { color: #f87171; }
-    #output.loading { color: #818cf8; }
+    .output-box { margin-top: 14px; background: #f7f8fa; border: 1px solid #e3e6ec; border-radius: 12px; overflow: hidden; }
+    .output-header { display: flex; justify-content: space-between; align-items: center; padding: 9px 14px; border-bottom: 1px solid #e3e6ec; font-size: 12px; font-weight: 600; color: #4f46e5; }
+    #copyBtn { background: #f0eefd; color: #4f46e5; border: 1px solid #ddd9fb; border-radius: 6px; padding: 3px 12px; font-size: 11px; font-weight: 600; cursor: pointer; }
+    #copyBtn:hover { background: #e4e0fb; }
+    #output { padding: 14px; font-size: 13px; color: #1e2330; line-height: 1.6; white-space: pre-wrap; word-break: break-word; min-height: 56px; }
+    #output.placeholder { color: #9aa1b0; }
+    #output.error { color: #dc2626; }
+    #output.loading { color: #4f46e5; }
 
     /* TEMPLATES */
-    .templates-card .card-title { font-size: 12px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
+    .templates-card { position: sticky; top: 20px; }
+    .templates-card .card-title { font-size: 12px; font-weight: 700; color: #5b6373; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
     .btn-add-tpl { background: #4f46e5; color: #fff; border: none; border-radius: 7px; padding: 5px 12px; font-size: 12px; font-weight: 600; cursor: pointer; }
     .btn-add-tpl:hover { background: #4338ca; }
-    .tpl-list { display: flex; flex-direction: column; gap: 8px; }
-    .tpl-item { display: flex; align-items: center; gap: 8px; background: #0f1117; border: 1px solid #2d3148; border-radius: 10px; padding: 10px 12px; cursor: pointer; transition: border-color 0.2s; }
+    .tpl-list { display: flex; flex-direction: column; gap: 8px; max-height: 70vh; overflow-y: auto; }
+    .tpl-item { display: flex; align-items: center; gap: 8px; background: #f7f8fa; border: 1px solid #e3e6ec; border-radius: 10px; padding: 10px 12px; cursor: pointer; transition: border-color 0.2s; }
     .tpl-item:hover { border-color: #4f46e5; }
-    .tpl-item.active { border-color: #818cf8; background: #1e2235; }
+    .tpl-item.active { border-color: #4f46e5; background: #f0eefd; }
     .tpl-icon { font-size: 18px; flex-shrink: 0; }
     .tpl-info { flex: 1; min-width: 0; }
-    .tpl-name { font-size: 13px; font-weight: 600; color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .tpl-link { font-size: 11px; color: #475569; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+    .tpl-name { font-size: 13px; font-weight: 600; color: #1e2330; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tpl-link { font-size: 11px; color: #9aa1b0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
     .tpl-actions { display: flex; gap: 6px; flex-shrink: 0; }
-    .btn-tpl-edit, .btn-tpl-del { background: #1e2235; border: 1px solid #2d3148; border-radius: 6px; padding: 4px 8px; font-size: 11px; cursor: pointer; }
-    .btn-tpl-edit { color: #818cf8; }
-    .btn-tpl-edit:hover { background: #2d3148; }
-    .btn-tpl-del { color: #f87171; }
-    .btn-tpl-del:hover { background: #2d1f1f; }
-    .tpl-empty { font-size: 13px; color: #475569; text-align: center; padding: 16px 0; }
+    .btn-tpl-edit, .btn-tpl-del { background: #ffffff; border: 1px solid #e3e6ec; border-radius: 6px; padding: 4px 8px; font-size: 11px; cursor: pointer; }
+    .btn-tpl-edit { color: #4f46e5; }
+    .btn-tpl-edit:hover { background: #f0eefd; }
+    .btn-tpl-del { color: #dc2626; }
+    .btn-tpl-del:hover { background: #fde8e8; }
+    .tpl-empty { font-size: 13px; color: #9aa1b0; text-align: center; padding: 16px 0; }
 
     /* MODAL */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; align-items: center; justify-content: center; }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(20,24,40,0.4); z-index: 100; align-items: center; justify-content: center; }
     .modal-overlay.show { display: flex; }
-    .modal { background: #1a1d2e; border: 1px solid #2d3148; border-radius: 16px; padding: 24px; width: 90%; max-width: 440px; }
-    .modal h2 { font-size: 15px; font-weight: 700; color: #818cf8; margin-bottom: 18px; }
+    .modal { background: #ffffff; border: 1px solid #e3e6ec; border-radius: 16px; padding: 24px; width: 90%; max-width: 440px; box-shadow: 0 8px 32px rgba(20,24,40,0.12); }
+    .modal h2 { font-size: 15px; font-weight: 700; color: #4f46e5; margin-bottom: 18px; }
     .modal .form-group { margin-bottom: 14px; }
-    .modal label { display: block; font-size: 11px; font-weight: 600; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px; }
+    .modal label { display: block; font-size: 11px; font-weight: 600; color: #5b6373; text-transform: uppercase; margin-bottom: 6px; }
     .modal input, .modal textarea { width: 100%; }
     .modal-btns { display: flex; gap: 10px; margin-top: 18px; }
     .btn-save { flex: 2; background: #4f46e5; color: #fff; border: none; border-radius: 10px; padding: 10px; font-size: 13px; font-weight: 700; cursor: pointer; }
     .btn-save:hover { background: #4338ca; }
-    .btn-cancel { flex: 1; background: #1e2235; color: #94a3b8; border: 1px solid #2d3148; border-radius: 10px; padding: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
-    .btn-cancel:hover { background: #2d3148; }
+    .btn-cancel { flex: 1; background: #f7f8fa; color: #5b6373; border: 1px solid #d8dce4; border-radius: 10px; padding: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .btn-cancel:hover { background: #ebedf1; }
   </style>
 </head>
 <body>
@@ -158,63 +170,67 @@
 <!-- ===== NỘI DUNG CHÍNH ===== -->
 <div class="wrap" id="mainContent" style="display:none">
 
-  <div class="card">
-    <div class="header">
-      <span style="font-size:22px">🤖</span>
-      <h1>AI Auto Content FaceBook- By Trường Saker</h1>
-    </div>
-
-    <!-- Key info -->
-    <div class="key-bar">
-      <div class="key-info">🔑 <span id="keyDisplay"></span></div>
-      <button class="btn-logout-key" id="btnLogoutKey">Đăng xuất</button>
-    </div>
-
-    <!-- Puter Auth -->
-    <div class="auth-bar">
-      <span class="auth-status" id="authStatus">⏳ Đang kiểm tra...</span>
-      <button class="btn-login hidden" id="loginBtn">Đăng nhập Puter</button>
-    </div>
-
-    <div class="form-group">
-      <div class="label-row">
-        <label>Nội dung bài viết gốc</label>
-        <button class="btn-sm" id="pasteBtn">📋 Dán nội dung</button>
+  <div class="main-col">
+    <div class="card">
+      <div class="header">
+        <span style="font-size:22px">🤖</span>
+        <h1>AI Auto Content FaceBook- By Trường Saker</h1>
       </div>
-      <textarea id="articleInput" placeholder="Dán nội dung bài viết cần trả lời vào đây..."></textarea>
-    </div>
 
-    <div class="form-group">
-      <label>Tên sản phẩm</label>
-      <input type="text" id="productNameInput" placeholder="VD: Sữa rửa mặt trị mụn, Áo thun nam...">
-    </div>
-
-    <div class="form-group">
-      <label>Danh sách link Shopee (mỗi link một dòng)</label>
-      <textarea id="productLinkInput" placeholder="Dán các link Shopee vào đây..."></textarea>
-    </div>
-
-    <div class="btn-group">
-      <button id="generateBtn">✨ Tạo bình luận</button>
-      <button id="clearBtn">🔄 Làm mới</button>
-    </div>
-
-    <div class="output-box">
-      <div class="output-header">
-        <span>✨ Kết quả bình luận</span>
-        <button id="copyBtn">Sao chép</button>
+      <!-- Key info -->
+      <div class="key-bar">
+        <div class="key-info">🔑 <span id="keyDisplay"></span></div>
+        <button class="btn-logout-key" id="btnLogoutKey">Đăng xuất</button>
       </div>
-      <div id="output" class="placeholder">Bình luận sẽ xuất hiện tại đây...</div>
+
+      <!-- Puter Auth -->
+      <div class="auth-bar">
+        <span class="auth-status" id="authStatus">⏳ Đang kiểm tra...</span>
+        <button class="btn-login hidden" id="loginBtn">Đăng nhập Puter</button>
+      </div>
+
+      <div class="form-group">
+        <div class="label-row">
+          <label>Nội dung bài viết gốc</label>
+          <button class="btn-sm" id="pasteBtn">📋 Dán nội dung</button>
+        </div>
+        <textarea id="articleInput" placeholder="Dán nội dung bài viết cần trả lời vào đây..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Tên sản phẩm</label>
+        <input type="text" id="productNameInput" placeholder="VD: Sữa rửa mặt trị mụn, Áo thun nam...">
+      </div>
+
+      <div class="form-group">
+        <label>Danh sách link Shopee (mỗi link một dòng)</label>
+        <textarea id="productLinkInput" placeholder="Dán các link Shopee vào đây..."></textarea>
+      </div>
+
+      <div class="btn-group">
+        <button id="generateBtn">✨ Tạo bình luận</button>
+        <button id="clearBtn">🔄 Làm mới</button>
+      </div>
+
+      <div class="output-box">
+        <div class="output-header">
+          <span>✨ Kết quả bình luận</span>
+          <button id="copyBtn">Sao chép</button>
+        </div>
+        <div id="output" class="placeholder">Bình luận sẽ xuất hiện tại đây...</div>
+      </div>
     </div>
   </div>
 
   <!-- TEMPLATES -->
-  <div class="card templates-card">
-    <div class="card-title">
-      <span>📦 Mẫu sản phẩm sẵn</span>
-      <button class="btn-add-tpl" id="btnAddTpl">+ Thêm mẫu</button>
+  <div class="side-col">
+    <div class="card templates-card">
+      <div class="card-title">
+        <span>📦 Mẫu sản phẩm sẵn</span>
+        <button class="btn-add-tpl" id="btnAddTpl">+ Thêm mẫu</button>
+      </div>
+      <div class="tpl-list" id="tplList"></div>
     </div>
-    <div class="tpl-list" id="tplList"></div>
   </div>
 
 </div>
