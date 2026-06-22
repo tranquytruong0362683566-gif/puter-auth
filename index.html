@@ -14,15 +14,17 @@
     }
     .wrap {
       width: 100%; max-width: 920px;
-      display: grid; grid-template-columns: 1fr 320px; gap: 16px;
+      display: grid; grid-template-columns: 580px 320px; gap: 16px;
       align-items: start; padding: 20px 0;
+      justify-content: center;
     }
-    .main-col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
-    .side-col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
-    .card { background: #ffffff; border: 1px solid #e3e6ec; border-radius: 16px; padding: 20px 24px; box-shadow: 0 1px 2px rgba(20,24,40,0.04); }
+    .main-col { display: flex; flex-direction: column; gap: 16px; min-width: 0; width: 580px; }
+    .side-col { display: flex; flex-direction: column; gap: 16px; min-width: 0; width: 320px; }
+    .card { background: #ffffff; border: 1px solid #e3e6ec; border-radius: 16px; padding: 20px 24px; box-shadow: 0 1px 2px rgba(20,24,40,0.04); overflow-wrap: break-word; }
 
-    @media (max-width: 760px) {
+    @media (max-width: 940px) {
       .wrap { grid-template-columns: 1fr; max-width: 560px; }
+      .main-col, .side-col { width: 100%; }
     }
 
     /* ===== LOGIN SCREEN ===== */
@@ -110,7 +112,7 @@
     .output-header { display: flex; justify-content: space-between; align-items: center; padding: 9px 14px; border-bottom: 1px solid #e3e6ec; font-size: 12px; font-weight: 600; color: #4f46e5; }
     #copyBtn { background: #f0eefd; color: #4f46e5; border: 1px solid #ddd9fb; border-radius: 6px; padding: 3px 12px; font-size: 11px; font-weight: 600; cursor: pointer; }
     #copyBtn:hover { background: #e4e0fb; }
-    #output { padding: 14px; font-size: 13px; color: #1e2330; line-height: 1.6; white-space: pre-wrap; word-break: break-word; min-height: 56px; }
+    #output { padding: 14px; font-size: 13px; color: #1e2330; line-height: 1.6; white-space: pre-wrap; word-break: break-word; overflow-wrap: anywhere; min-height: 56px; max-width: 100%; }
     #output.placeholder { color: #9aa1b0; }
     #output.error { color: #dc2626; }
     #output.loading { color: #4f46e5; }
