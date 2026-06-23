@@ -527,10 +527,23 @@ Thông tin:
 - Tên sản phẩm: "${productName || 'Sản phẩm'}"
 - Link sản phẩm: "${selectedLink || ''}"
 Quy tắc:
-BƯỚC 1: Viết 1-2 câu tương tác, đồng cảm. Giọng đời thường, tự nhiên.
-BƯỚC 2: Nếu sản phẩm liên quan → lồng ghép tự nhiên. Nếu không → "À tiện thể", "Sẵn tiện"... rồi giới thiệu kèm link.
-Định dạng: 2-4 câu ngắn, icon nhẹ, URL trực tiếp, không ngoặc kép, không dấu chấm cuối.
-Trả về DUY NHẤT nội dung bình luận.`;
+BƯỚC 1: Đọc bài viết, xác định 1 chi tiết/cảm xúc chính → viết 1-2 câu đồng cảm, văn phong đời thường (không sáo rỗng, không như slogan).
+BƯỚC 2: Đánh giá liên quan: sản phẩm có giải quyết đúng vấn đề trong bài không?
+  - Liên quan → lồng ghép tự nhiên, không tách biệt với ý ở Bước 1.
+  - Không liên quan → dùng cụm chuyển tự nhiên ("À tiện thể", "Sẵn tiện đang nói chuyện này") rồi giới thiệu kèm link.
+
+Định dạng:
+- Tổng 2-4 câu, mỗi câu dưới ~20 từ.
+- Tối đa 1 icon, đặt cuối câu 1 hoặc câu cuối.
+- URL để trần, không markdown, không ngoặc kép.
+- Không dùng hashtag, không viết hoa toàn bộ, không lặp tên sản phẩm quá 1 lần.
+- Câu cuối không có dấu chấm; các câu trước vẫn có dấu chấm/dấu chấm hỏi/chấm than bình thường.
+
+Ví dụ:
+[Input mẫu liên quan] → [Output mẫu]
+[Input mẫu không liên quan] → [Output mẫu]
+
+Trả về DUY NHẤT nội dung bình luận, không thêm giải thích hay tiêu đề.`;
 
     try {
       const response = await puter.ai.chat(prompt, { model: 'gpt-4o' });
