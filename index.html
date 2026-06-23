@@ -32,12 +32,59 @@
     .header h1 { font-size: 15px; font-weight: 700; color: #4f46e5; text-transform: uppercase; letter-spacing: 0.5px; }
 
     /* AUTH BAR */
-    .auth-bar { display: flex; align-items: center; justify-content: space-between; background: #f7f8fa; border: 1px solid #e3e6ec; border-radius: 10px; padding: 9px 14px; margin-bottom: 16px; font-size: 13px; }
-    .auth-status { color: #5b6373; }
+    .auth-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #f7f8fa; border: 1px solid #e3e6ec; border-radius: 10px;
+      padding: 9px 14px; margin-bottom: 16px; font-size: 13px; gap: 10px;
+    }
+    .auth-left { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+    .auth-avatar {
+      width: 28px; height: 28px; border-radius: 50%; background: #e3e6ec;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0; overflow: hidden;
+    }
+    .auth-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .auth-info { min-width: 0; }
+    .auth-status { color: #5b6373; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .auth-status.ok { color: #15803d; }
-    .btn-login { background: #4f46e5; color: #fff; border: none; border-radius: 7px; padding: 5px 14px; font-size: 12px; font-weight: 600; cursor: pointer; }
+    .auth-username { font-size: 11px; color: #9aa1b0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .auth-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    .btn-login {
+      background: #4f46e5; color: #fff; border: none; border-radius: 7px;
+      padding: 5px 14px; font-size: 12px; font-weight: 600; cursor: pointer;
+    }
     .btn-login:hover { background: #4338ca; }
-    .btn-login.hidden { display: none; }
+    .btn-switch {
+      background: #fff8e1; color: #b45309; border: 1px solid #fde68a;
+      border-radius: 7px; padding: 5px 10px; font-size: 11px; font-weight: 600;
+      cursor: pointer; white-space: nowrap;
+    }
+    .btn-switch:hover { background: #fef3c7; }
+    .btn-logout {
+      background: #fff1f1; color: #dc2626; border: 1px solid #fecaca;
+      border-radius: 7px; padding: 5px 10px; font-size: 11px; font-weight: 600;
+      cursor: pointer; white-space: nowrap;
+    }
+    .btn-logout:hover { background: #fee2e2; }
+    .hidden { display: none !important; }
+
+    /* TOKEN WARNING BANNER */
+    .token-banner {
+      display: none; background: #fff8e1; border: 1px solid #fde68a;
+      border-radius: 10px; padding: 10px 14px; margin-bottom: 14px;
+      font-size: 12px; color: #92400e; line-height: 1.5;
+      align-items: flex-start; gap: 10px;
+    }
+    .token-banner.show { display: flex; }
+    .token-banner-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .token-banner-text { flex: 1; }
+    .token-banner-text strong { display: block; margin-bottom: 3px; font-size: 13px; }
+    .btn-relogin {
+      background: #f59e0b; color: #fff; border: none; border-radius: 6px;
+      padding: 4px 12px; font-size: 11px; font-weight: 700; cursor: pointer;
+      white-space: nowrap; flex-shrink: 0; align-self: center;
+    }
+    .btn-relogin:hover { background: #d97706; }
 
     /* FORM */
     .form-group { margin-bottom: 14px; }
@@ -104,6 +151,13 @@
     .btn-save:hover { background: #4338ca; }
     .btn-cancel { flex: 1; background: #f7f8fa; color: #5b6373; border: 1px solid #d8dce4; border-radius: 10px; padding: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
     .btn-cancel:hover { background: #ebedf1; }
+
+    /* SWITCH CONFIRM MODAL */
+    #switchModal .modal { max-width: 360px; text-align: center; }
+    #switchModal .modal h2 { font-size: 18px; margin-bottom: 8px; }
+    #switchModal .modal p { font-size: 13px; color: #5b6373; margin-bottom: 20px; line-height: 1.5; }
+    .btn-confirm-switch { width: 100%; background: #f59e0b; color: #fff; border: none; border-radius: 10px; padding: 11px; font-size: 14px; font-weight: 700; cursor: pointer; margin-bottom: 10px; }
+    .btn-confirm-switch:hover { background: #d97706; }
   </style>
 </head>
 <body>
@@ -117,9 +171,30 @@
         <h1>AI Auto Content FaceBook - By Trường Saker</h1>
       </div>
 
+      <!-- AUTH BAR -->
       <div class="auth-bar">
-        <span class="auth-status" id="authStatus">⏳ Đang kiểm tra...</span>
-        <button class="btn-login hidden" id="loginBtn">Đăng nhập Puter</button>
+        <div class="auth-left">
+          <div class="auth-avatar" id="authAvatar">👤</div>
+          <div class="auth-info">
+            <div class="auth-status" id="authStatus">⏳ Đang kiểm tra...</div>
+            <div class="auth-username hidden" id="authUsername"></div>
+          </div>
+        </div>
+        <div class="auth-actions">
+          <button class="btn-login hidden" id="loginBtn">🔑 Đăng nhập</button>
+          <button class="btn-switch hidden" id="switchBtn">🔄 Đổi tài khoản</button>
+          <button class="btn-logout hidden" id="logoutBtn">↩ Đăng xuất</button>
+        </div>
+      </div>
+
+      <!-- TOKEN EXHAUSTED BANNER -->
+      <div class="token-banner" id="tokenBanner">
+        <div class="token-banner-icon">⚠️</div>
+        <div class="token-banner-text">
+          <strong>Tài khoản Puter đã hết token miễn phí</strong>
+          Đăng nhập bằng tài khoản Puter khác để tiếp tục tạo bình luận.
+        </div>
+        <button class="btn-relogin" id="btnRelogin">🔄 Đổi tài khoản</button>
       </div>
 
       <div class="form-group">
@@ -167,6 +242,7 @@
 
 </div>
 
+<!-- TEMPLATE MODAL -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <h2 id="modalTitle">Thêm mẫu mới</h2>
@@ -189,36 +265,115 @@
   </div>
 </div>
 
+<!-- SWITCH ACCOUNT CONFIRM MODAL -->
+<div class="modal-overlay" id="switchModal">
+  <div class="modal">
+    <h2>🔄 Đổi tài khoản Puter</h2>
+    <p>Bạn sẽ được đăng xuất khỏi tài khoản hiện tại và chuyển sang đăng nhập tài khoản mới.<br><br>Các mẫu sản phẩm sẽ không bị mất.</p>
+    <button class="btn-confirm-switch" id="btnConfirmSwitch">Xác nhận đổi tài khoản</button>
+    <button class="btn-cancel" id="btnCancelSwitch" style="width:100%">Huỷ</button>
+  </div>
+</div>
+
 <script>
+  // ==============================
+  // TOKEN ERROR DETECTION
+  // ==============================
+  const TOKEN_ERROR_PATTERNS = [
+    'quota', 'rate limit', 'rate_limit', 'insufficient', 'limit exceeded',
+    'token', 'credits', 'billing', 'usage', '429', 'too many requests',
+    'hết', 'vượt quá', 'giới hạn'
+  ];
+
+  function isTokenError(msg) {
+    if (!msg) return false;
+    const lower = msg.toLowerCase();
+    return TOKEN_ERROR_PATTERNS.some(p => lower.includes(p));
+  }
+
   // ==============================
   // PUTER AUTH
   // ==============================
-  const authStatus = document.getElementById('authStatus');
-  const loginBtn = document.getElementById('loginBtn');
+  const authStatus    = document.getElementById('authStatus');
+  const authUsername  = document.getElementById('authUsername');
+  const authAvatar    = document.getElementById('authAvatar');
+  const loginBtn      = document.getElementById('loginBtn');
+  const switchBtn     = document.getElementById('switchBtn');
+  const logoutBtn     = document.getElementById('logoutBtn');
+  const tokenBanner   = document.getElementById('tokenBanner');
+  const switchModal   = document.getElementById('switchModal');
 
-  function updateAuthUI() {
+  async function updateAuthUI() {
     if (typeof puter === 'undefined' || !puter.auth.isSignedIn()) {
       authStatus.textContent = '⚠️ Chưa đăng nhập Puter';
       authStatus.className = 'auth-status';
+      authUsername.classList.add('hidden');
+      authAvatar.innerHTML = '👤';
       loginBtn.classList.remove('hidden');
-    } else {
-      authStatus.textContent = '✅ Đã đăng nhập Puter';
-      authStatus.className = 'auth-status ok';
-      loginBtn.classList.add('hidden');
+      switchBtn.classList.add('hidden');
+      logoutBtn.classList.add('hidden');
+      return;
+    }
+
+    // Logged in — fetch user info
+    authStatus.textContent = '✅ Đã đăng nhập Puter';
+    authStatus.className = 'auth-status ok';
+    loginBtn.classList.add('hidden');
+    switchBtn.classList.remove('hidden');
+    logoutBtn.classList.remove('hidden');
+
+    try {
+      const user = await puter.auth.getUser();
+      if (user) {
+        const name = user.username || user.email || 'Puter User';
+        authUsername.textContent = name;
+        authUsername.classList.remove('hidden');
+        if (user.avatar_url) {
+          authAvatar.innerHTML = `<img src="${user.avatar_url}" alt="avatar" onerror="this.parentElement.innerHTML='👤'">`;
+        } else {
+          authAvatar.innerHTML = '👤';
+        }
+      }
+    } catch(e) {
+      // getUser failed — not critical, just skip
+      authAvatar.innerHTML = '👤';
     }
   }
 
-  loginBtn.addEventListener('click', async () => {
-    try { await puter.auth.signIn(); updateAuthUI(); }
-    catch(e) { authStatus.textContent = '❌ ' + e.message; }
-  });
+  async function doSignIn() {
+    try {
+      await puter.auth.signIn();
+      tokenBanner.classList.remove('show');
+      await updateAuthUI();
+    } catch(e) {
+      authStatus.textContent = '❌ ' + (e.message || 'Đăng nhập thất bại');
+    }
+  }
 
-  // Tự động kích hoạt khi trang web tải xong
-  window.addEventListener('DOMContentLoaded', () => {
-    updateAuthUI();
-    loadTemplates();
-    renderTemplates();
+  async function doSignOut() {
+    try {
+      await puter.auth.signOut();
+    } catch(e) { /* signOut can fail silently */ }
+    tokenBanner.classList.remove('show');
+    await updateAuthUI();
+  }
+
+  async function doSwitchAccount() {
+    switchModal.classList.remove('show');
+    await doSignOut();
+    await doSignIn();
+  }
+
+  // Auth button wiring
+  loginBtn.addEventListener('click', doSignIn);
+  logoutBtn.addEventListener('click', async () => {
+    if (confirm('Đăng xuất khỏi Puter?')) await doSignOut();
   });
+  switchBtn.addEventListener('click', () => switchModal.classList.add('show'));
+  document.getElementById('btnRelogin').addEventListener('click', () => switchModal.classList.add('show'));
+  document.getElementById('btnConfirmSwitch').addEventListener('click', doSwitchAccount);
+  document.getElementById('btnCancelSwitch').addEventListener('click', () => switchModal.classList.remove('show'));
+  switchModal.addEventListener('click', (e) => { if (e.target === switchModal) switchModal.classList.remove('show'); });
 
   // ==============================
   // TEMPLATES
@@ -227,14 +382,12 @@
   let templates = [];
   let editingIndex = -1;
 
-  const tplList = document.getElementById('tplList');
-  const modalOverlay = document.getElementById('modalOverlay');
-  const modalTitle = document.getElementById('modalTitle');
-  const tplNameInput = document.getElementById('tplNameInput');
+  const tplList       = document.getElementById('tplList');
+  const modalOverlay  = document.getElementById('modalOverlay');
+  const modalTitle    = document.getElementById('modalTitle');
+  const tplNameInput  = document.getElementById('tplNameInput');
   const tplProductInput = document.getElementById('tplProductInput');
   const tplLinksInput = document.getElementById('tplLinksInput');
-  const btnSaveTpl = document.getElementById('btnSaveTpl');
-  const btnCancelTpl = document.getElementById('btnCancelTpl');
 
   function loadTemplates() {
     try { templates = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
@@ -293,14 +446,14 @@
     modalOverlay.classList.add('show'); tplNameInput.focus();
   });
 
-  btnCancelTpl.addEventListener('click', () => modalOverlay.classList.remove('show'));
+  document.getElementById('btnCancelTpl').addEventListener('click', () => modalOverlay.classList.remove('show'));
   modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) modalOverlay.classList.remove('show'); });
 
-  btnSaveTpl.addEventListener('click', () => {
-    const name = tplNameInput.value.trim();
+  document.getElementById('btnSaveTpl').addEventListener('click', () => {
+    const name    = tplNameInput.value.trim();
     const product = tplProductInput.value.trim();
-    const links = tplLinksInput.value.trim();
-    if (!name) { alert('Vui lòng nhập tên mẫu!'); return; }
+    const links   = tplLinksInput.value.trim();
+    if (!name)    { alert('Vui lòng nhập tên mẫu!'); return; }
     if (!product) { alert('Vui lòng nhập tên sản phẩm!'); return; }
     const tpl = { name, product, links };
     if (editingIndex >= 0) templates[editingIndex] = tpl; else templates.push(tpl);
@@ -310,11 +463,11 @@
   // ==============================
   // MAIN ACTIONS
   // ==============================
-  const articleInput = document.getElementById('articleInput');
+  const articleInput     = document.getElementById('articleInput');
   const productNameInput = document.getElementById('productNameInput');
   const productLinkInput = document.getElementById('productLinkInput');
-  const generateBtn = document.getElementById('generateBtn');
-  const output = document.getElementById('output');
+  const generateBtn      = document.getElementById('generateBtn');
+  const output           = document.getElementById('output');
 
   document.getElementById('pasteBtn').addEventListener('click', async () => {
     try { articleInput.value = await navigator.clipboard.readText(); }
@@ -324,6 +477,7 @@
   document.getElementById('clearBtn').addEventListener('click', () => {
     articleInput.value = ''; productNameInput.value = ''; productLinkInput.value = '';
     output.textContent = 'Bình luận sẽ xuất hiện tại đây...'; output.className = 'placeholder';
+    tokenBanner.classList.remove('show');
     document.querySelectorAll('.tpl-item').forEach(el => el.classList.remove('active'));
   });
 
@@ -338,14 +492,22 @@
   });
 
   generateBtn.addEventListener('click', async () => {
-    const article = articleInput.value.trim();
+    const article     = articleInput.value.trim();
     const productName = productNameInput.value.trim();
     const productLinks = productLinkInput.value.trim();
     if (!article) { alert('Vui lòng dán nội dung bài viết gốc!'); return; }
 
+    // Auth check — sign in if not already
     if (!puter.auth.isSignedIn()) {
-      try { await puter.auth.signIn(); updateAuthUI(); }
-      catch(e) { output.textContent = '❌ Chưa đăng nhập Puter.'; output.className = 'error'; return; }
+      try {
+        await puter.auth.signIn();
+        await updateAuthUI();
+        tokenBanner.classList.remove('show');
+      } catch(e) {
+        output.textContent = '❌ Chưa đăng nhập Puter.';
+        output.className = 'error';
+        return;
+      }
     }
 
     let selectedLink = '';
@@ -356,6 +518,7 @@
 
     generateBtn.disabled = true; generateBtn.textContent = '⏳ Đang xử lý...';
     output.textContent = 'Đang phân tích và tạo bình luận...'; output.className = 'loading';
+    tokenBanner.classList.remove('show');
 
     const prompt = `Bạn là chuyên gia Social Content và Affiliate Marketing.
 Nhiệm vụ: Viết 1 bình luận mạng xã hội gồm 2 phần liên kết mượt mà thành đoạn văn hoàn chỉnh.
@@ -375,11 +538,35 @@ Trả về DUY NHẤT nội dung bình luận.`;
       output.textContent = result.replace(/^"|"$/g, '').trim();
       output.className = '';
     } catch(e) {
-      output.textContent = '❌ Lỗi: ' + (e.message || 'Không xác định');
-      output.className = 'error';
+      const errMsg = e.message || e.toString() || '';
+
+      // Token/quota exhausted — surface the switch banner
+      if (isTokenError(errMsg)) {
+        output.textContent = '⚠️ Tài khoản Puter hiện tại đã hết token. Vui lòng đổi sang tài khoản khác.';
+        output.className = 'error';
+        tokenBanner.classList.add('show');
+      } else if (errMsg.toLowerCase().includes('sign') || errMsg.toLowerCase().includes('auth') || errMsg.toLowerCase().includes('unauthorized') || errMsg.includes('401')) {
+        // Session expired
+        output.textContent = '🔑 Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.';
+        output.className = 'error';
+        await doSignOut();
+        await updateAuthUI();
+      } else {
+        output.textContent = '❌ Lỗi: ' + errMsg;
+        output.className = 'error';
+      }
     } finally {
       generateBtn.disabled = false; generateBtn.textContent = '✨ Tạo bình luận';
     }
+  });
+
+  // ==============================
+  // INIT
+  // ==============================
+  window.addEventListener('DOMContentLoaded', async () => {
+    await updateAuthUI();
+    loadTemplates();
+    renderTemplates();
   });
 </script>
 </body>
