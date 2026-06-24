@@ -550,6 +550,14 @@ Trả về DUY NHẤT nội dung bình luận, không thêm giải thích hay ti
       let result = response?.message?.content || (typeof response === 'string' ? response : 'Không có phản hồi.');
       output.textContent = result.replace(/^"|"$/g, '').trim();
       output.className = '';
+      // Auto-copy to clipboard as soon as result arrives
+      try {
+        await navigator.clipboard.writeText(output.textContent);
+        const copyBtn = document.getElementById('copyBtn');
+        const orig = copyBtn.textContent;
+        copyBtn.textContent = '✔️ Đã tự chép!';
+        setTimeout(() => copyBtn.textContent = orig, 3000);
+      } catch(e) { /* clipboard blocked — user can still hit copy manually */ }
     } catch(e) {
       const errMsg = e.message || e.toString() || '';
 
