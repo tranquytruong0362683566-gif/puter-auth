@@ -429,25 +429,35 @@
     function load()  { try { items = JSON.parse(localStorage.getItem(cfg.storageKey)) || []; } catch { items = []; } }
     function save()  { localStorage.setItem(cfg.storageKey, JSON.stringify(items)); }
 
+    // Attach delegated listener once per manager (survives re-renders)
+    cfg.listEl.addEventListener('click', function(e) {
+      const actionBtn = e.target.closest('[data-action]');
+      if (actionBtn) {
+        e.stopPropagation();
+        const idx = parseInt(actionBtn.dataset.idx, 10);
+        if (actionBtn.dataset.action === 'edit') openEdit(idx);
+        else if (actionBtn.dataset.action === 'del') del(idx);
+        return;
+      }
+      const item = e.target.closest('.tpl-item[data-idx]');
+      if (item) apply(parseInt(item.dataset.idx, 10));
+    });
+
     function render() {
       if (!items.length) {
         cfg.listEl.innerHTML = '<div class="tpl-empty">Chưa có mẫu nào. Nhấn "+ Thêm" để tạo.</div>';
         return;
       }
       cfg.listEl.innerHTML = items.map((t, i) => `
-        <div class="tpl-item" id="${cfg.idPrefix}${i}" onclick="(function(){
-          document.getElementById('productNameInput').value=${JSON.stringify('')}||'';
-          var mgr=window._tplMgrs&&window._tplMgrs['${cfg.storageKey}'];
-          if(mgr)mgr.apply(${i});
-        })()">
+        <div class="tpl-item" id="${cfg.idPrefix}${i}" data-idx="${i}">
           <div class="tpl-icon">📦</div>
           <div class="tpl-info">
             <div class="tpl-name">${esc(t.name)}</div>
             <div class="tpl-link">${esc(t.product)}</div>
           </div>
-          <div class="tpl-actions" onclick="event.stopPropagation()">
-            <button class="btn-tpl-edit" onclick="(function(){var mgr=window._tplMgrs&&window._tplMgrs['${cfg.storageKey}'];if(mgr)mgr.openEdit(${i});})()">✏️</button>
-            <button class="btn-tpl-del"  onclick="(function(){var mgr=window._tplMgrs&&window._tplMgrs['${cfg.storageKey}'];if(mgr)mgr.del(${i});})()">🗑️</button>
+          <div class="tpl-actions">
+            <button class="btn-tpl-edit" data-action="edit" data-idx="${i}">✏️</button>
+            <button class="btn-tpl-del"  data-action="del"  data-idx="${i}">🗑️</button>
           </div>
         </div>`).join('');
     }
