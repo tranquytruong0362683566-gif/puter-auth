@@ -259,10 +259,33 @@
 
 </div>
 
-<!-- TEMPLATE MODAL -->
+<!-- MODAL — LEFT COLUMN -->
+<div class="modal-overlay" id="modalOverlayLeft">
+  <div class="modal">
+    <h2 id="modalTitleLeft">Thêm mẫu mới (Cột trái)</h2>
+    <div class="form-group">
+      <label>Tên mẫu</label>
+      <input type="text" id="tplNameInputLeft" placeholder="VD: Mẫu 1 - Kem dưỡng da...">
+    </div>
+    <div class="form-group">
+      <label>Tên sản phẩm</label>
+      <input type="text" id="tplProductInputLeft" placeholder="VD: Kem dưỡng ẩm Cerave...">
+    </div>
+    <div class="form-group">
+      <label>Danh sách link Shopee (mỗi link một dòng)</label>
+      <textarea id="tplLinksInputLeft" style="height:70px" placeholder="Dán link Shopee vào đây..."></textarea>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-save" id="btnSaveTplLeft">💾 Lưu mẫu</button>
+      <button class="btn-cancel" id="btnCancelTplLeft">Huỷ</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL — RIGHT COLUMN -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
-    <h2 id="modalTitle">Thêm mẫu mới</h2>
+    <h2 id="modalTitle">Thêm mẫu mới (Cột phải)</h2>
     <div class="form-group">
       <label>Tên mẫu</label>
       <input type="text" id="tplNameInput" placeholder="VD: Mẫu 1 - Kem dưỡng da...">
@@ -393,106 +416,129 @@
   switchModal.addEventListener('click', (e) => { if (e.target === switchModal) switchModal.classList.remove('show'); });
 
   // ==============================
-  // TEMPLATES
+  // TEMPLATES — TWO INDEPENDENT COLUMNS
   // ==============================
-  const STORAGE_KEY = 'ai_commenter_templates';
-  let templates = [];
-  let editingIndex = -1;
-
-  const tplList       = document.getElementById('tplList');
-  const tplListLeft   = document.getElementById('tplListLeft');
-  const modalOverlay  = document.getElementById('modalOverlay');
-  const modalTitle    = document.getElementById('modalTitle');
-  const tplNameInput  = document.getElementById('tplNameInput');
-  const tplProductInput = document.getElementById('tplProductInput');
-  const tplLinksInput = document.getElementById('tplLinksInput');
-
-  function loadTemplates() {
-    try { templates = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
-    catch { templates = []; }
-  }
-
-  function saveTemplates() { localStorage.setItem(STORAGE_KEY, JSON.stringify(templates)); }
-
   function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-  function makeTplHTML(i, side) {
-    const t = templates[i];
-    const idPrefix = side === 'left' ? 'tplL-' : 'tpl-';
-    return `
-      <div class="tpl-item" id="${idPrefix}${i}" onclick="applyTemplate(${i})">
-        <div class="tpl-icon">📦</div>
-        <div class="tpl-info">
-          <div class="tpl-name">${esc(t.name)}</div>
-          <div class="tpl-link">${esc(t.product)}</div>
-        </div>
-        <div class="tpl-actions" onclick="event.stopPropagation()">
-          <button class="btn-tpl-edit" onclick="openEditModal(${i})">✏️</button>
-          <button class="btn-tpl-del" onclick="deleteTemplate(${i})">🗑️</button>
-        </div>
-      </div>`;
-  }
+  // ── Factory: creates a fully self-contained template manager ──
+  function createTemplateManager(cfg) {
+    // cfg = { storageKey, listEl, addBtn, modalEl, titleEl, nameEl, productEl, linksEl, saveBtn, cancelBtn, idPrefix, label }
+    let items = [];
+    let editingIdx = -1;
 
-  function renderTemplates() {
-    const emptyMsg = '<div class="tpl-empty">Chưa có mẫu nào. Nhấn "+ Thêm" để tạo.</div>';
-    if (!templates.length) {
-      tplList.innerHTML = emptyMsg;
-      tplListLeft.innerHTML = emptyMsg;
-      return;
+    function load()  { try { items = JSON.parse(localStorage.getItem(cfg.storageKey)) || []; } catch { items = []; } }
+    function save()  { localStorage.setItem(cfg.storageKey, JSON.stringify(items)); }
+
+    function render() {
+      if (!items.length) {
+        cfg.listEl.innerHTML = '<div class="tpl-empty">Chưa có mẫu nào. Nhấn "+ Thêm" để tạo.</div>';
+        return;
+      }
+      cfg.listEl.innerHTML = items.map((t, i) => `
+        <div class="tpl-item" id="${cfg.idPrefix}${i}" onclick="(function(){
+          document.getElementById('productNameInput').value=${JSON.stringify('')}||'';
+          var mgr=window._tplMgrs&&window._tplMgrs['${cfg.storageKey}'];
+          if(mgr)mgr.apply(${i});
+        })()">
+          <div class="tpl-icon">📦</div>
+          <div class="tpl-info">
+            <div class="tpl-name">${esc(t.name)}</div>
+            <div class="tpl-link">${esc(t.product)}</div>
+          </div>
+          <div class="tpl-actions" onclick="event.stopPropagation()">
+            <button class="btn-tpl-edit" onclick="(function(){var mgr=window._tplMgrs&&window._tplMgrs['${cfg.storageKey}'];if(mgr)mgr.openEdit(${i});})()">✏️</button>
+            <button class="btn-tpl-del"  onclick="(function(){var mgr=window._tplMgrs&&window._tplMgrs['${cfg.storageKey}'];if(mgr)mgr.del(${i});})()">🗑️</button>
+          </div>
+        </div>`).join('');
     }
-    const rightHTML = templates.map((_, i) => makeTplHTML(i, 'right')).join('');
-    const leftHTML  = templates.map((_, i) => makeTplHTML(i, 'left')).join('');
-    tplList.innerHTML = rightHTML;
-    tplListLeft.innerHTML = leftHTML;
+
+    function apply(i) {
+      const t = items[i];
+      document.getElementById('productNameInput').value = t.product;
+      document.getElementById('productLinkInput').value = t.links;
+      cfg.listEl.querySelectorAll('.tpl-item').forEach(el => el.classList.remove('active'));
+      document.getElementById(cfg.idPrefix + i)?.classList.add('active');
+      document.getElementById('productNameInput').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function del(i) {
+      if (!confirm('Xoá mẫu "' + items[i].name + '"?')) return;
+      items.splice(i, 1); save(); render();
+    }
+
+    function openEdit(i) {
+      editingIdx = i;
+      cfg.titleEl.textContent = 'Sửa mẫu — ' + cfg.label;
+      cfg.nameEl.value = items[i].name;
+      cfg.productEl.value = items[i].product;
+      cfg.linksEl.value = items[i].links;
+      cfg.modalEl.classList.add('show'); cfg.nameEl.focus();
+    }
+
+    function openAdd() {
+      editingIdx = -1;
+      cfg.titleEl.textContent = 'Thêm mẫu mới — ' + cfg.label;
+      cfg.nameEl.value = ''; cfg.productEl.value = ''; cfg.linksEl.value = '';
+      cfg.modalEl.classList.add('show'); cfg.nameEl.focus();
+    }
+
+    function saveItem() {
+      const name    = cfg.nameEl.value.trim();
+      const product = cfg.productEl.value.trim();
+      const links   = cfg.linksEl.value.trim();
+      if (!name)    { alert('Vui lòng nhập tên mẫu!'); return; }
+      if (!product) { alert('Vui lòng nhập tên sản phẩm!'); return; }
+      const tpl = { name, product, links };
+      if (editingIdx >= 0) items[editingIdx] = tpl; else items.push(tpl);
+      save(); render(); cfg.modalEl.classList.remove('show');
+    }
+
+    // Wire buttons
+    cfg.addBtn.addEventListener('click', openAdd);
+    cfg.saveBtn.addEventListener('click', saveItem);
+    cfg.cancelBtn.addEventListener('click', () => cfg.modalEl.classList.remove('show'));
+    cfg.modalEl.addEventListener('click', (e) => { if (e.target === cfg.modalEl) cfg.modalEl.classList.remove('show'); });
+
+    load(); render();
+    return { apply, openEdit, del, render, load };
   }
 
-  function applyTemplate(i) {
-    const t = templates[i];
-    document.getElementById('productNameInput').value = t.product;
-    document.getElementById('productLinkInput').value = t.links;
-    document.querySelectorAll('.tpl-item').forEach(el => el.classList.remove('active'));
-    // Highlight in both columns
-    document.getElementById('tpl-' + i)?.classList.add('active');
-    document.getElementById('tplL-' + i)?.classList.add('active');
-    document.getElementById('productNameInput').scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }
-
-  function deleteTemplate(i) {
-    if (!confirm(`Xoá mẫu "${templates[i].name}"?`)) return;
-    templates.splice(i, 1); saveTemplates(); renderTemplates();
-  }
-
-  function openEditModal(i) {
-    editingIndex = i;
-    const t = templates[i];
-    modalTitle.textContent = 'Sửa mẫu';
-    tplNameInput.value = t.name; tplProductInput.value = t.product; tplLinksInput.value = t.links;
-    modalOverlay.classList.add('show'); tplNameInput.focus();
-  }
-
-  // Both "Add" buttons open the same modal
-  ['btnAddTpl', 'btnAddTplLeft'].forEach(id => {
-    document.getElementById(id).addEventListener('click', () => {
-      editingIndex = -1;
-      modalTitle.textContent = 'Thêm mẫu mới';
-      tplNameInput.value = ''; tplProductInput.value = ''; tplLinksInput.value = '';
-      modalOverlay.classList.add('show'); tplNameInput.focus();
-    });
+  // ── Instantiate LEFT manager ──
+  window._tplMgrs = window._tplMgrs || {};
+  window._tplMgrs['ai_commenter_templates_LEFT'] = createTemplateManager({
+    storageKey : 'ai_commenter_templates_LEFT',
+    listEl     : document.getElementById('tplListLeft'),
+    addBtn     : document.getElementById('btnAddTplLeft'),
+    modalEl    : document.getElementById('modalOverlayLeft'),
+    titleEl    : document.getElementById('modalTitleLeft'),
+    nameEl     : document.getElementById('tplNameInputLeft'),
+    productEl  : document.getElementById('tplProductInputLeft'),
+    linksEl    : document.getElementById('tplLinksInputLeft'),
+    saveBtn    : document.getElementById('btnSaveTplLeft'),
+    cancelBtn  : document.getElementById('btnCancelTplLeft'),
+    idPrefix   : 'tplL-',
+    label      : 'Cột trái'
   });
 
-  document.getElementById('btnCancelTpl').addEventListener('click', () => modalOverlay.classList.remove('show'));
-  modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) modalOverlay.classList.remove('show'); });
-
-  document.getElementById('btnSaveTpl').addEventListener('click', () => {
-    const name    = tplNameInput.value.trim();
-    const product = tplProductInput.value.trim();
-    const links   = tplLinksInput.value.trim();
-    if (!name)    { alert('Vui lòng nhập tên mẫu!'); return; }
-    if (!product) { alert('Vui lòng nhập tên sản phẩm!'); return; }
-    const tpl = { name, product, links };
-    if (editingIndex >= 0) templates[editingIndex] = tpl; else templates.push(tpl);
-    saveTemplates(); renderTemplates(); modalOverlay.classList.remove('show');
+  // ── Instantiate RIGHT manager ──
+  window._tplMgrs['ai_commenter_templates'] = createTemplateManager({
+    storageKey : 'ai_commenter_templates',
+    listEl     : document.getElementById('tplList'),
+    addBtn     : document.getElementById('btnAddTpl'),
+    modalEl    : document.getElementById('modalOverlay'),
+    titleEl    : document.getElementById('modalTitle'),
+    nameEl     : document.getElementById('tplNameInput'),
+    productEl  : document.getElementById('tplProductInput'),
+    linksEl    : document.getElementById('tplLinksInput'),
+    saveBtn    : document.getElementById('btnSaveTpl'),
+    cancelBtn  : document.getElementById('btnCancelTpl'),
+    idPrefix   : 'tpl-',
+    label      : 'Cột phải'
   });
+
+  // ── Keep old loadTemplates / renderTemplates as no-ops so INIT block doesn't break ──
+  function loadTemplates()   {}
+  function renderTemplates() {}
 
   // ==============================
   // MAIN ACTIONS
