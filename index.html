@@ -13,18 +13,24 @@
       min-height: 100vh; display: flex; justify-content: center; padding: 20px;
     }
     .wrap {
-      width: 100%; max-width: 920px;
-      display: grid; grid-template-columns: 580px 320px; gap: 16px;
+      width: 100%; max-width: 1260px;
+      display: grid; grid-template-columns: 280px 1fr 280px; gap: 16px;
       align-items: start; padding: 20px 0;
       justify-content: center;
     }
-    .main-col { display: flex; flex-direction: column; gap: 16px; min-width: 0; width: 580px; }
-    .side-col { display: flex; flex-direction: column; gap: 16px; min-width: 0; width: 320px; }
+    .main-col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+    .side-col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
     .card { background: #ffffff; border: 1px solid #e3e6ec; border-radius: 16px; padding: 20px 24px; box-shadow: 0 1px 2px rgba(20,24,40,0.04); overflow-wrap: break-word; }
 
-    @media (max-width: 940px) {
+    @media (max-width: 1100px) {
+      .wrap { grid-template-columns: 220px 1fr 220px; }
+    }
+    @media (max-width: 820px) {
       .wrap { grid-template-columns: 1fr; max-width: 560px; }
-      .main-col, .side-col { width: 100%; }
+      .side-col { width: 100%; }
+      .side-col-left { order: 2; }
+      .main-col { order: 1; }
+      .side-col-right { order: 3; }
     }
 
     /* HEADER */
@@ -164,6 +170,17 @@
 
 <div class="wrap">
 
+  <!-- LEFT TEMPLATES COLUMN -->
+  <div class="side-col side-col-left">
+    <div class="card templates-card">
+      <div class="card-title">
+        <span>📦 Mẫu sản phẩm sẵn</span>
+        <button class="btn-add-tpl" id="btnAddTplLeft">+ Thêm</button>
+      </div>
+      <div class="tpl-list" id="tplListLeft"></div>
+    </div>
+  </div>
+
   <div class="main-col">
     <div class="card">
       <div class="header">
@@ -230,7 +247,7 @@
     </div>
   </div>
 
-  <div class="side-col">
+  <div class="side-col side-col-right">
     <div class="card templates-card">
       <div class="card-title">
         <span>📦 Mẫu sản phẩm sẵn</span>
@@ -383,6 +400,7 @@
   let editingIndex = -1;
 
   const tplList       = document.getElementById('tplList');
+  const tplListLeft   = document.getElementById('tplListLeft');
   const modalOverlay  = document.getElementById('modalOverlay');
   const modalTitle    = document.getElementById('modalTitle');
   const tplNameInput  = document.getElementById('tplNameInput');
@@ -398,23 +416,34 @@
 
   function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-  function renderTemplates() {
-    if (!templates.length) {
-      tplList.innerHTML = '<div class="tpl-empty">Chưa có mẫu nào. Nhấn "+ Thêm mẫu" để tạo.</div>';
-      return;
-    }
-    tplList.innerHTML = templates.map((t, i) => `
-      <div class="tpl-item" id="tpl-${i}" onclick="applyTemplate(${i})">
+  function makeTplHTML(i, side) {
+    const t = templates[i];
+    const idPrefix = side === 'left' ? 'tplL-' : 'tpl-';
+    return `
+      <div class="tpl-item" id="${idPrefix}${i}" onclick="applyTemplate(${i})">
         <div class="tpl-icon">📦</div>
         <div class="tpl-info">
           <div class="tpl-name">${esc(t.name)}</div>
           <div class="tpl-link">${esc(t.product)}</div>
         </div>
         <div class="tpl-actions" onclick="event.stopPropagation()">
-          <button class="btn-tpl-edit" onclick="openEditModal(${i})">✏️ Sửa</button>
+          <button class="btn-tpl-edit" onclick="openEditModal(${i})">✏️</button>
           <button class="btn-tpl-del" onclick="deleteTemplate(${i})">🗑️</button>
         </div>
-      </div>`).join('');
+      </div>`;
+  }
+
+  function renderTemplates() {
+    const emptyMsg = '<div class="tpl-empty">Chưa có mẫu nào. Nhấn "+ Thêm" để tạo.</div>';
+    if (!templates.length) {
+      tplList.innerHTML = emptyMsg;
+      tplListLeft.innerHTML = emptyMsg;
+      return;
+    }
+    const rightHTML = templates.map((_, i) => makeTplHTML(i, 'right')).join('');
+    const leftHTML  = templates.map((_, i) => makeTplHTML(i, 'left')).join('');
+    tplList.innerHTML = rightHTML;
+    tplListLeft.innerHTML = leftHTML;
   }
 
   function applyTemplate(i) {
@@ -422,7 +451,9 @@
     document.getElementById('productNameInput').value = t.product;
     document.getElementById('productLinkInput').value = t.links;
     document.querySelectorAll('.tpl-item').forEach(el => el.classList.remove('active'));
+    // Highlight in both columns
     document.getElementById('tpl-' + i)?.classList.add('active');
+    document.getElementById('tplL-' + i)?.classList.add('active');
     document.getElementById('productNameInput').scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
@@ -439,11 +470,14 @@
     modalOverlay.classList.add('show'); tplNameInput.focus();
   }
 
-  document.getElementById('btnAddTpl').addEventListener('click', () => {
-    editingIndex = -1;
-    modalTitle.textContent = 'Thêm mẫu mới';
-    tplNameInput.value = ''; tplProductInput.value = ''; tplLinksInput.value = '';
-    modalOverlay.classList.add('show'); tplNameInput.focus();
+  // Both "Add" buttons open the same modal
+  ['btnAddTpl', 'btnAddTplLeft'].forEach(id => {
+    document.getElementById(id).addEventListener('click', () => {
+      editingIndex = -1;
+      modalTitle.textContent = 'Thêm mẫu mới';
+      tplNameInput.value = ''; tplProductInput.value = ''; tplLinksInput.value = '';
+      modalOverlay.classList.add('show'); tplNameInput.focus();
+    });
   });
 
   document.getElementById('btnCancelTpl').addEventListener('click', () => modalOverlay.classList.remove('show'));
