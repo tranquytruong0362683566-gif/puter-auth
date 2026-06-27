@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Auto Content FaceBook - By Trường Saker</title>
+  <title>AI Auto Content FaceBook Pro - By Trường Saker</title>
   <script src="https://js.puter.com/v2/"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,6 +36,7 @@
     /* HEADER */
     .header { display: flex; align-items: center; gap: 10px; padding-bottom: 16px; border-bottom: 1px solid #ebedf1; margin-bottom: 16px; }
     .header h1 { font-size: 15px; font-weight: 700; color: #4f46e5; text-transform: uppercase; letter-spacing: 0.5px; }
+    .pro-badge { background: #f59e0b; color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-left: auto;}
 
     /* AUTH BAR */
     .auth-bar {
@@ -98,15 +99,18 @@
     label { font-size: 11px; font-weight: 600; color: #5b6373; text-transform: uppercase; letter-spacing: 0.5px; }
     .btn-sm { background: #f0eefd; color: #4f46e5; border: 1px solid #ddd9fb; border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 600; cursor: pointer; }
     .btn-sm:hover { background: #e4e0fb; }
-    textarea, input[type="text"] {
+    
+    /* ADDED SELECT STYLING FOR PRO UPGRADE */
+    textarea, input[type="text"], select {
       width: 100%; background: #ffffff; border: 1px solid #d8dce4; border-radius: 10px;
       padding: 9px 12px; font-size: 13px; font-family: inherit; color: #1e2330;
-      line-height: 1.5; transition: border-color 0.2s; resize: none;
+      line-height: 1.5; transition: border-color 0.2s; resize: none; outline: none;
     }
-    textarea:focus, input[type="text"]:focus { outline: none; border-color: #4f46e5; }
+    textarea:focus, input[type="text"]:focus, select:focus { border-color: #4f46e5; }
     textarea::placeholder, input::placeholder { color: #9aa1b0; }
     textarea { height: 76px; }
     #productLinkInput { height: 56px; }
+    select { cursor: pointer; appearance: auto; } /* Ensure dropdown arrow looks natural */
 
     .btn-group { display: flex; gap: 10px; margin-top: 6px; }
     #generateBtn { flex: 2; background: #4f46e5; color: #fff; border: none; border-radius: 10px; padding: 11px; font-size: 14px; font-weight: 700; cursor: pointer; }
@@ -170,7 +174,6 @@
 
 <div class="wrap">
 
-  <!-- LEFT TEMPLATES COLUMN -->
   <div class="side-col side-col-left">
     <div class="card templates-card">
       <div class="card-title">
@@ -186,9 +189,9 @@
       <div class="header">
         <span style="font-size:22px">🤖</span>
         <h1>AI Auto Content FaceBook - By Trường Saker</h1>
+        <span class="pro-badge">PRO</span>
       </div>
 
-      <!-- AUTH BAR -->
       <div class="auth-bar">
         <div class="auth-left">
           <div class="auth-avatar" id="authAvatar">👤</div>
@@ -204,7 +207,6 @@
         </div>
       </div>
 
-      <!-- TOKEN EXHAUSTED BANNER -->
       <div class="token-banner" id="tokenBanner">
         <div class="token-banner-icon">⚠️</div>
         <div class="token-banner-text">
@@ -230,6 +232,16 @@
       <div class="form-group">
         <label>Danh sách link Shopee (mỗi link một dòng)</label>
         <textarea id="productLinkInput" placeholder="Dán các link Shopee vào đây..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>🎭 Phong cách bình luận</label>
+        <select id="toneSelect">
+          <option value="đời thường, tự nhiên như bạn bè nói chuyện">🌱 Đời thường & Tự nhiên</option>
+          <option value="hài hước, gen Z, dùng từ lóng mạng xã hội nhẹ nhàng">🔥 Hài hước & Bắt trend</option>
+          <option value="chuyên gia, tư vấn có tâm, phân tích logic">💼 Chuyên gia tư vấn</option>
+          <option value="khen ngợi, tích cực, đồng cảm sâu sắc">❤️ Khen ngợi & Tích cực</option>
+        </select>
       </div>
 
       <div class="btn-group">
@@ -259,7 +271,6 @@
 
 </div>
 
-<!-- MODAL — LEFT COLUMN -->
 <div class="modal-overlay" id="modalOverlayLeft">
   <div class="modal">
     <h2 id="modalTitleLeft">Thêm mẫu mới (Cột trái)</h2>
@@ -282,7 +293,6 @@
   </div>
 </div>
 
-<!-- MODAL — RIGHT COLUMN -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <h2 id="modalTitle">Thêm mẫu mới (Cột phải)</h2>
@@ -305,7 +315,6 @@
   </div>
 </div>
 
-<!-- SWITCH ACCOUNT CONFIRM MODAL -->
 <div class="modal-overlay" id="switchModal">
   <div class="modal">
     <h2>🔄 Đổi tài khoản Puter</h2>
@@ -556,6 +565,7 @@
   const articleInput     = document.getElementById('articleInput');
   const productNameInput = document.getElementById('productNameInput');
   const productLinkInput = document.getElementById('productLinkInput');
+  const toneSelect       = document.getElementById('toneSelect'); // PRO UPGRADE
   const generateBtn      = document.getElementById('generateBtn');
   const output           = document.getElementById('output');
 
@@ -582,9 +592,11 @@
   });
 
   generateBtn.addEventListener('click', async () => {
-    const article     = articleInput.value.trim();
-    const productName = productNameInput.value.trim();
+    const article      = articleInput.value.trim();
+    const productName  = productNameInput.value.trim();
     const productLinks = productLinkInput.value.trim();
+    const selectedTone = toneSelect.value; // PRO UPGRADE
+    
     if (!article) { alert('Vui lòng dán nội dung bài viết gốc!'); return; }
 
     // Auth check — sign in if not already
@@ -610,6 +622,7 @@
     output.textContent = 'Đang phân tích và tạo bình luận...'; output.className = 'loading';
     tokenBanner.classList.remove('show');
 
+    // PRO UPGRADE: Modified Prompt to include dynamic Tone
     const prompt = `Bạn là chuyên gia Social Content và Affiliate Marketing.
 Nhiệm vụ: Viết 1 bình luận mạng xã hội gồm 2 phần liên kết mượt mà thành đoạn văn hoàn chỉnh.
 Thông tin:
@@ -617,7 +630,7 @@ Thông tin:
 - Tên sản phẩm: "${productName || 'Sản phẩm'}"
 - Link sản phẩm: "${selectedLink || ''}"
 Quy tắc:
-BƯỚC 1: Đọc bài viết, xác định 1 chi tiết/cảm xúc chính → viết 1-2 câu đồng cảm, văn phong đời thường (không sáo rỗng, không như slogan).
+BƯỚC 1: Đọc bài viết, xác định 1 chi tiết/cảm xúc chính → viết 1-2 câu đồng cảm. VĂN PHONG YÊU CẦU: ${selectedTone} (không sáo rỗng, không như slogan).
 BƯỚC 2: Đánh giá liên quan: sản phẩm có giải quyết đúng vấn đề trong bài không?
   - Liên quan → lồng ghép tự nhiên, không tách biệt với ý ở Bước 1.
   - Không liên quan → dùng cụm chuyển tự nhiên ("À tiện thể", "Sẵn tiện đang nói chuyện này") rồi giới thiệu kèm link.
@@ -628,10 +641,6 @@ BƯỚC 2: Đánh giá liên quan: sản phẩm có giải quyết đúng vấn 
 - URL để trần, không markdown, không ngoặc kép.
 - Không dùng hashtag, không viết hoa toàn bộ, không lặp tên sản phẩm quá 1 lần.
 - Câu cuối không có dấu chấm; các câu trước vẫn có dấu chấm/dấu chấm hỏi/chấm than bình thường.
-
-Ví dụ:
-[Input mẫu liên quan] → [Output mẫu]
-[Input mẫu không liên quan] → [Output mẫu]
 
 Trả về DUY NHẤT nội dung bình luận, không thêm giải thích hay tiêu đề.`;
 
