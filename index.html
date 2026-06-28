@@ -912,8 +912,17 @@ Chỉ trả về nội dung bình luận, không thêm tiêu đề, không giả
         setOutput(result || 'Không có phản hồi từ AI.', result ? '' : 'error');
 
         if (result) {
-          await copyText(result, { silent: true });
-          toast('Đã tạo và tự sao chép bình luận');
+          const copied = await copyText(els.output.textContent, { silent: true });
+          const oldCopyText = els.copyBtn.textContent;
+          if (copied) {
+            els.copyBtn.textContent = '✔️ Đã tự copy';
+            toast('Đã tạo xong và tự động copy kết quả');
+            setTimeout(() => { els.copyBtn.textContent = oldCopyText; }, 2500);
+          } else {
+            els.copyBtn.textContent = 'Copy thủ công';
+            toast('Trình duyệt chặn tự động copy. Bấm nút Sao chép để copy thủ công.', 'warning');
+            setTimeout(() => { els.copyBtn.textContent = oldCopyText; }, 3000);
+          }
         }
       } catch (error) {
         const errText = getErrorText(error);
